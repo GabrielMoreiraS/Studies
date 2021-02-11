@@ -27,10 +27,6 @@
             var p = 0;
             var btn = document.querySelector("[data-btn-about]");
             var about = document.querySelector("[data-about]");
-            window.onresize = () =>{
-                about.style.display = "none";
-                p = 0;
-            }
             btn.addEventListener('click', ()=>{
                 if(p == 0){
                     about.style.display = "block";
