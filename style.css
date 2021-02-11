@@ -65,7 +65,24 @@ html,body{
     box-shadow: 5px 10px 15px 6px black;
 }
 
-.title{
+.header{
+    width: 100%;
+    margin: 0 auto;
+}
+
+.header a{
+    width: 100%;
+    max-width: 70px;
+    text-decoration: none;
+    border-radius: 10px;
+    background-color: rgb(94, 103, 119);
+    margin-top: 7px;
+    padding: 3px;
+    color: white;
+    display: block;
+}
+
+.header h1{
     width: 100%;
     text-align: center;
 }
