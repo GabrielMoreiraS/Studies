@@ -29,6 +29,9 @@
             var about = document.querySelector("[data-about]");
             btn.addEventListener('click', ()=>{
                 if(p == 0){
+                    setTimeout(()=>{
+                        window.scrollTo(0,window.innerHeight);
+                    },500);
                     about.style.display = "block";
                     p = 1;
                 }else{
