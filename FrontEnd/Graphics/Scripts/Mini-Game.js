@@ -19,7 +19,7 @@
     body.onload = function(){ 
         checkDevice();
     }
-    window.addEventListener('resize',windowSizeCheck);
+    window.addEventListener('resize',checkDevice);
 
     function checkDevice(){
         var check;
@@ -33,10 +33,10 @@
             },speed);
         }
         if(width > 300 && width < 400){
-            var theCA = new gameEnviroment();
-            theCA.refreshCA();
-            theCA.canvC.font = "21px Arial";
-            theCA.canvC.fillText("Turn your device sideways to play the game",0,150);
+            var thec = document.getElementById("canvG");
+            thecX = thec.getContext('2d');
+            thecX.font = "21px Arial";
+            thecX.fillText("Turn your device sideways to play the game",0,150);
             check = "";
         }
     }
