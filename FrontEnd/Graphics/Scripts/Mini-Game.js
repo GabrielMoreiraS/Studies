@@ -15,7 +15,7 @@
     start.style.backgroundColor = "green";
     var theGA,  theGC, theGB, theGO = [], theGCS, theGBS, theGDS, theGS;
     var checkStart, k = 0, s = 0, r = 0, stopS = 0, score = 0, speed = 7, cs = 1, times = 1, i = false, it = false,
-    cWidth , cHeight, mih,mah,mig,mag,ev,check = undefined;;
+    cWidth , cHeight, mih,mah,mig,mag,ev,check = undefined,gcx,gcy,gcpy;
 
     body.onload = function(){ 
         checkDevice();
@@ -27,16 +27,24 @@
                 theGA.stop();  
             },speed);
             i = true;
+            console.log('d')
         }
     }
     window.addEventListener('resize',checkDevice);
 
     function checkDevice(){
-        
         var width = window.innerWidth;
         // var height = window.innerHeight;
         if(width > 690){
             checkStart = true;
+            mih = 50;
+            mah = 200;
+            mig = 45;
+            mag = 200;
+            ev = 370;
+            gcx = 45;
+            gcy = 45;
+            gcpy = 220;
         }
         if(check == undefined && width <= 690){
             cWidth = 380;
@@ -50,6 +58,16 @@
             check = true;
         }
         if(check == true && width > 300 && width < 690 && it == false){
+            screenTouch();
+            mih = 25;
+            mah = 140;
+            mig = 25;
+            mag = 120;
+            ev = 370;
+            gcx = 25;
+            gcy = 25;
+            gcpy = 150;
+            console.log('s')
             startOnKey();
             startGame();
             setTimeout(function(){
@@ -182,9 +200,9 @@
     function startGame(){
         theGA = new gameEnviroment();
         theGA.start();
-        theGC = new components(40, 220, 30, 30);
+        console.log(gcpy)
         theGS = new components(460, 30, 30, "Arial", "white", "text");
-        theGC = new components(40, 220, 40, 40, "Media/Mini-Game/Images/Snake.jpg", "image");
+        theGC = new components(40, gcpy, gcx, gcy, "Media/Mini-Game/Images/Snake.jpg", "image");
         theGB = new components(0, 0, 600, 500,"Media/Mini-Game/Images/bc.png", "background");
         theGBS = new sound("Media/Mini-Game/Sounds/bgs.mp3", "bg");
         theGCS = new sound("Media/Mini-Game/Sounds/hit.mp3");
@@ -369,7 +387,7 @@
 
     //Touch screen controls
     function screenTouch(){
-
+        
     }
     
     //Panel controls
@@ -441,13 +459,13 @@
         cO: function(){
             var x, height, gap, minHeight, maxHeight, minGap, maxGap;
             theGA.frameNo += cs;
-            if(theGA.frameNo == 1 || everyinterval(370)){
+            if(theGA.frameNo == 1 || everyinterval(ev)){
                 x = theGA.canvas.width;
-                minHeight = 50;
-                maxHeight = 200;
+                minHeight = mih;
+                maxHeight = mah;
                 height = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);//it will return some random number
-                minGap = 45;
-                maxGap = 200;
+                minGap = mig;
+                maxGap = mag;
                 gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
                 theGO.push(new components(x, 0, 35, height, "blue"));//this one always draw a obstacle at the 0 point of the Y axis
                 theGO.push(new components(x, height + gap + 30, 35, 500, "green"));
