@@ -18,9 +18,7 @@
     cWidth , cHeight, mih,mah,mig,mag,ev,check = undefined,gcx,gcy,gcpy;
 
     body.onload = function(){ 
-        body.css("-webkit-user-select","none");
-        body.css("-ms-user-select","none");
-        body.css("user-select","none");
+        body.userSelect = 'none';
         checkDevice();
         if(checkStart == true && i == false){
             cWidth = 600, cHeight = 500;
@@ -269,7 +267,7 @@
             this.face.src = this.color;
         }
         this.screen = function(){
-
+            var left = this.cx
         }
         this.increase = function(){ 
             if(this.type == "background"){
