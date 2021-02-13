@@ -1,0 +1,10 @@
+.btnP{
+    width: 100%;
+    max-width: 400px;
+    height: 92px;
+    padding: 5px;
+    margin: 0 auto;
+    text-align: center;
+    border-radius: 10px;
+    background-color: white;
+}

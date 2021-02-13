@@ -5,6 +5,7 @@
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="stylesheet" type="text/css" href="../../style.css"/>
+        <link rel="stylesheet" type="text/css" href="Styles/Mini-Game.css"/>
     </head>
     <body>
         <div class="container">
@@ -13,11 +14,22 @@
                 <h1 class="title">Graphics</h1>
             </div>
             <div class="topic">
-                <h2 class="title-box"></h2>
+                <h2 class="title-box">Mini-Game</h2>
                 <div class="box">
-                    
+                    <div class="canvas-handler">
+                        <canvas id="canvG"></canvas>
+                    </div>
+                    <div class="btnP">
+                        <button style="width:100%;max-width:50px;" id="up">UP</button><br/>
+                        <button style="width:100%;max-width:50px;" id="left">LEFT</button>
+                        <button style="width:100%;max-width:50px;" id="right">RIGTH</button><br/>
+                        <button style="width:50%;max-width:50px;" id="down">DOWN</button><br/>
+                        <button style="width:50%;max-width:50px;margin-top:5px" id="start">START</button>
+                        <button style="width:50%;max-width:58px;margin-top:5px" id="resert">RESERT</button>
+                    </div>
                 </div>
             </div>
         </div>
+        <script src="Scripts/Mini-Game.js"></script>
     </body>
 </html>
