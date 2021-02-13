@@ -14,30 +14,45 @@
     start.style.backgroundColor = "green";
     var theGA,  theGC, theGB, theGO = [], theGCS, theGBS, theGDS, theGS;
     var checkStart, k = 0, s = 0, r = 0, stopS = 0, score = 0, speed = 7, cs = 1, times = 1,
-    cWidth, cHeight;
+    cWidth = 600, cHeight = 500;
 
     body.onload = function(){ 
         checkDevice();
-    }
-    window.addEventListener('resize',checkDevice);
-
-    function checkDevice(){
-        var check;
-        var width = window.innerWidth;
-        var height = window.innerHeight;
-        if(width > 690){
+        if(checkStart == true){
             startOnKey();
             startGame();
             setTimeout(function(){
             theGA.stop();  
             },speed);
         }
-        if(width > 300 && width < 400){
+    }
+    window.addEventListener('resize',checkDevice);
+
+    function checkDevice(){
+        var check = undefined;
+        var width = window.innerWidth;
+        // var height = window.innerHeight;
+        if(width > 690){
+            checkStart = true;
+        }
+        if(check == undefined && width > 300 && width < 690){
             var thec = document.getElementById("canvG");
+            thec.width
             thecX = thec.getContext('2d');
             thecX.font = "21px Arial";
             thecX.fillText("Turn your device sideways to play the game",0,150);
-            check = "";
+            check = true;
+        }
+        if(check == true && width > 300 && width < 690){
+            cWidth = 380;
+            cHeight = 280;
+            setTimeout(()=>{
+                startOnKey();
+                startGame();
+                setTimeout(function(){
+                theGA.stop();  
+                },speed);
+            },1)
         }
     }
     
@@ -178,8 +193,8 @@
 
     function gameEnviroment(){
         this.canvas = document.getElementById("canvG");
-        this.canvas.width = 600;
-        this.canvas.height = 500;
+        this.canvas.width = cWidth;
+        this.canvas.height = cHeight;
         this.canvas.style.border = "1px solid #383636 inset";
         this.canvas.style.backgroundColor = " #cfcece";
         this.frameNo = 0;
