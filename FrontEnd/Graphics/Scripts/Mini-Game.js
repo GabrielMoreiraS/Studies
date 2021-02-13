@@ -13,7 +13,7 @@
     resert.style.backgroundColor = "yellow";
     var start = document.getElementById("start");
     start.style.backgroundColor = "green";
-    var theGA,  theGC, theGB, theGO = [], theGCS, theGBS, theGDS, theGS, mU, mL, mD, mR;
+    var theGA,  theGC, theGB, theGO = [], theGCS, theGBS, theGDS, theGS, mU, mL, mD, mR, thec;
     var checkStart, k = 0, s = 0, r = 0, stopS = 0, score = 0, speed = 7, cs = 1, times = 1, i = false, it = false,
     cWidth , cHeight, mih,mah,mig,mag,ev,check = undefined,gcx,gcy,gcpy;
 
@@ -50,15 +50,15 @@
             cHeight = 210;
             caH.style.width = cWidth + "px";
             caH.style.height = cHeight + "px";
-            var thec = new gameEnviroment;
+            thec = new gameEnviroment;
             thec.canvC.clearRect(0, 0, cWidth, cHeight);
             thec.canvC.font = "16px Arial";
             thec.canvC.fillText("Turn your device sideways to play the game",-1,120);
             check = true;
         }
         if(check == true && width > 300 && width < 690 && it == false){
-            cWidth = 380;
-            cHeight = 280;
+            cWidth = 400;
+            cHeight = 300;
             caH.style.width = cWidth + "px";
             caH.style.height = cHeight + "px";
             mih = 25;
@@ -201,6 +201,12 @@
     function startGame(){
         theGA = new gameEnviroment();
         theGA.start();
+        if(check == true){
+            mU = new components(40,179,25,25,'rgba(130, 186, 190,0.8)');
+            mD = new components(40,237,25,25,'rgba(130, 186, 190,0.8)');
+            mL = new components(10,208,25,25,'rgba(130, 186, 190,0.8)');
+            mR = new components(70,208,25,25,'rgba(130, 186, 190,0.8)');
+        }
         theGS = new components(460, 30, 30, "Arial", "white", "text");
         theGC = new components(40, gcpy, gcx, gcy, "Media/Mini-Game/Images/Snake.jpg", "image");
         theGB = new components(0, 0, 600, 500,"Media/Mini-Game/Images/bc.png", "background");
@@ -267,7 +273,15 @@
             this.face.src = this.color;
         }
         this.screen = function(){
-            var left = this.cx
+            var left = this.cx;
+            var right = this.cx + this.cw;
+            var top = this.cy;
+            var height = this.cy + this.ch;
+            var clicked = true;
+            if(theGA.x > right || theGA.y > height || theGA.y < top || theGA.x < left){
+                clicked = false;
+            }
+            return clicked;
         }
         this.increase = function(){ 
             if(this.type == "background"){
@@ -406,14 +420,29 @@
 
     function screenBTN(){
         if(check == true){
-            mU = new components(40,179,25,25,'rgba(130, 186, 190,0.8)');
-            mD = new components(40,237,25,25,'rgba(130, 186, 190,0.8)');
-            mL = new components(10,208,25,25,'rgba(130, 186, 190,0.8)');
-            mR = new components(70,208,25,25,'rgba(130, 186, 190,0.8)');
             mR.objBuilder();
             mL.objBuilder();
             mU.objBuilder();
             mD.objBuilder();
+        }
+    }
+
+    function screenControls(){
+        if(thec.x && thec.y){
+            if(mU.screen()){
+                theGC.speedY = -times;
+                theGC.gravitySpeed = 0;
+                theGC.gravity = 0;
+            }
+            if(mD.screen()){
+                theGC.speedY = times;
+            }
+            if(mL.screen()){
+                theGC.speedX = -times;
+            }
+            if(mR.screen()){
+                theGC.speedX = times;
+            }
         }
     }
     
@@ -430,26 +459,26 @@
             theGC.gravitySpeed = 0;
             theGC.gravity = 0;
         }
-        btnUp.addEventListener("touchstart", up);
-        btnUp.addEventListener("touchend", clearMove);
+        btnUp.addEventListener("mousedown", up);
+        btnUp.addEventListener("mouseup", clearMove);
         
         function down(){
             theGC.speedY = times;
         }
-        btnDown.addEventListener("touchstart", down);
-        btnDown.addEventListener("touchend", clearMove);
+        btnDown.addEventListener("mousedown", down);
+        btnDown.addEventListener("mouseup", clearMove);
         
         function right(){
             theGC.speedX = times;
         }
-        btnLeft.addEventListener("touchstart", left);
-        btnLeft.addEventListener("touchend", clearMove);
+        btnLeft.addEventListener("mousedown", left);
+        btnLeft.addEventListener("mouseup", clearMove);
     
         function left(){
             theGC.speedX = -times;
         }
-        btnRight.addEventListener("touchstart", right);
-        btnRight.addEventListener("touchend", clearMove);
+        btnRight.addEventListener("mousedown", right);
+        btnRight.addEventListener("mouseup", clearMove);
     }
 
     //create a frame counter that returns true everytime the result is 0
@@ -552,6 +581,7 @@
         theGC.collision();
         theGC.increase();//this here increases the character position properties
         keyboard();
+        screenControls();
         buttons();
         dificulty();
         theGS.text = "Score: " + score;
