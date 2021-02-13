@@ -119,13 +119,3 @@ html,body{
     background-color: grey;
     text-align: center;
 }
-
-@media screen and (max-width: 690px){
-    .canvas-handler{
-        width: 380px;
-        height: 280px;
-        margin: 0 auto;
-        background-color: grey;
-        text-align: center;
-    }
-}

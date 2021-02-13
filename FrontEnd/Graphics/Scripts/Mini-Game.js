@@ -4,6 +4,7 @@
     //you must specify classes, objects... functions, whatever is necessary to organizedly create your project
     //NOTE: try to understand how things must be constructed, how they must be organized
     var body = document.body;
+    var caH = document.querySelector('.canvas-handler')
     var btnUp = document.getElementById("up");
     var btnDown = document.getElementById("down");
     var btnLeft = document.getElementById("left");
@@ -13,46 +14,48 @@
     var start = document.getElementById("start");
     start.style.backgroundColor = "green";
     var theGA,  theGC, theGB, theGO = [], theGCS, theGBS, theGDS, theGS;
-    var checkStart, k = 0, s = 0, r = 0, stopS = 0, score = 0, speed = 7, cs = 1, times = 1,
-    cWidth = 600, cHeight = 500;
+    var checkStart, k = 0, s = 0, r = 0, stopS = 0, score = 0, speed = 7, cs = 1, times = 1, i = false, it = false,
+    cWidth , cHeight, mih,mah,mig,mag,ev,check = undefined;;
 
     body.onload = function(){ 
         checkDevice();
-        if(checkStart == true){
+        if(checkStart == true && i == false){
+            cWidth = 600, cHeight = 500;
             startOnKey();
             startGame();
             setTimeout(function(){
-            theGA.stop();  
+                theGA.stop();  
             },speed);
+            i = true;
         }
     }
     window.addEventListener('resize',checkDevice);
 
     function checkDevice(){
-        var check = undefined;
+        
         var width = window.innerWidth;
         // var height = window.innerHeight;
         if(width > 690){
             checkStart = true;
         }
-        if(check == undefined && width > 300 && width < 690){
-            var thec = document.getElementById("canvG");
-            thec.width
-            thecX = thec.getContext('2d');
-            thecX.font = "21px Arial";
-            thecX.fillText("Turn your device sideways to play the game",0,150);
-            check = true;
-        }
-        if(check == true && width > 300 && width < 690){
+        if(check == undefined && width <= 690){
             cWidth = 380;
             cHeight = 280;
-            setTimeout(()=>{
-                startOnKey();
-                startGame();
-                setTimeout(function(){
+            caH.style.width = cWidth + "px";
+            caH.style.height = cHeight + "px";
+            var thec = new gameEnviroment;
+            thec.canvC.clearRect(0, 0, cWidth, cHeight);
+            thec.canvC.font = "16px Arial";
+            thec.canvC.fillText("Turn your device sideways to play the game",30,150);
+            check = true;
+        }
+        if(check == true && width > 300 && width < 690 && it == false){
+            startOnKey();
+            startGame();
+            setTimeout(function(){
                 theGA.stop();  
-                },speed);
-            },1)
+            },speed);
+            it = true;
         }
     }
     
