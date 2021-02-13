@@ -18,6 +18,9 @@
     cWidth , cHeight, mih,mah,mig,mag,ev,check = undefined,gcx,gcy,gcpy;
 
     body.onload = function(){ 
+        body.css("-webkit-user-select","none");
+        body.css("-ms-user-select","none");
+        body.css("user-select","none");
         checkDevice();
         if(checkStart == true && i == false){
             cWidth = 600, cHeight = 500;
@@ -231,6 +234,22 @@
         this.start = function(){
             this.inter = setInterval(refreshGA, speed);//every 1 millisecond it calls the function refreshGA
         }
+        window.addEventListener('mousedown',function(e){
+            this.y = e.pageY;
+            this.x = e.pageX;
+        })
+        window.addEventListener('mouseup',function(e){
+            this.y = false;
+            this.x = false;
+        })
+        window.addEventListener('touchstart',function(e){
+            this.y = e.pageY;
+            this.x = e.pageX;
+        })
+        window.addEventListener('touchend',function(e){
+            this.y = false;
+            this.x = false;
+        })
     }
 
     function components(x,y,width,height,color,type){
@@ -248,6 +267,9 @@
         if(this.type == "image" || this.type == "background"){
             this.face = new Image();
             this.face.src = this.color;
+        }
+        this.screen = function(){
+
         }
         this.increase = function(){ 
             if(this.type == "background"){
