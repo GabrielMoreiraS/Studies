@@ -5,7 +5,7 @@ const canvasWarnings = document.querySelector('.canvas-handler-warnings');
 const canvasHandler = document.querySelector('.canvas-handler');
 
 //VARIABLES:
-let winWidth, winHeight, canvasW, canvasH, menus, fonts;
+let winWidth, winHeight, canvasW, canvasH, menus, fonts, touch, click;
 
 //INITIALIZATION:
 body.onload = function(){
@@ -35,10 +35,11 @@ function windowCheck(){
         }else if(winWidth < 350){
             warningCanvasHandler();
         }
-
         menus = function(){
             if(winWidth > 600){
-                theCanvas.mainMenuComponents();
+                theCanvas.startMenu();
+                theCanvas.mainMenu();
+                theCanvas.continueMenu();
             }else{
                 theCanvas.warningMenu();
             }
@@ -60,10 +61,6 @@ function windowCheck(){
     window.addEventListener('resize', windowCheck);
 }
 
-function warningMenu(){
-
-}
-
 var theCanvas = {
     createCanvas: function(w,h){
         this.width = w;
@@ -71,9 +68,6 @@ var theCanvas = {
         canvas.width = this.width;
         canvas.height = this.height;
         this.start();
-        setTimeout(()=>{
-            this.stop();
-        },1);
     },
     start: function(){
         this.canvasContext = canvas.getContext('2d');
@@ -86,18 +80,18 @@ var theCanvas = {
         this.canvasContext.clearRect(0,0,this.width,this.height);
     },
     warningMenu: function(){
-        var background, mainTitle, verificationButtonRect, verificationButtonMessage;
-        fonts = 15;
+        var background, mainTitle;
         background = new Components('background',0,0,this.width,this.height,'black');
-        mainTitle = new Components('mainTitle',(this.width / 2),50,'white');
-        verificationButtonRect = new Components('verificationButtonRect',(this.width / 2 - (100/2)),100,100,20,'white');
-        verificationButtonMessage = new Components('verificationButtonMessage',(this.width / 2),114,'black');
+        mainTitle = new Components('mainTitle',(this.width / 2),50,15,'white');
         background.builder();
         mainTitle.builder();
-        verificationButtonRect.builder();
-        verificationButtonMessage.builder();
     },
-    mainMenuComponents: function(){
+    startMenu: function(){
+    },
+    mainMenu: function(){
+
+    },
+    continueMenu: function(){
 
     }
 }
@@ -113,25 +107,37 @@ class Components{
     }
     builder(){
         var ctx = theCanvas.canvasContext;
+        //The warning menu
         if(this.type === 'background'){
             ctx.fillStyle = this.color;
             ctx.fillRect(this.x,this.y,this.width,this.height);
         }
         if(this.type === 'mainTitle'){
-            ctx.font = `${fonts}px Arial`;
-            ctx.fillStyle = this.width;
+            ctx.font = `${this.width}px Arial`;
+            ctx.fillStyle = this.height;
             ctx.textAlign = 'center';
             ctx.fillText('Turn your device sideways, please.',this.x,this.y);
         }
-        if(this.type === 'verificationButtonRect'){
-            ctx.fillStyle = this.color;
-            ctx.fillRect(this.x,this.y,this.width,this.height);
+        //The main menu
+    }
+    screenButtons(){
+        var top, left, right, bottom;
+        top = this.y + canvasHandler.offsetTop;
+        left = this.x + canvas.offsetLeft;
+        right = (left + this.width);
+        bottom = (top + this.height);
+        canvas.ontouchstart = (e)=>{
+            var x = e.touches[0].pageX;
+            var y = e.touches[0].pageY;
+            if(top > y || left > x || bottom < y || right < x){
+                return touch = false;
+                
+            }else{
+                return touch = true;
+            }
         }
-        if(this.type === 'verificationButtonMessage'){
-            ctx.font = `${fonts}px Arial`;
-            ctx.fillStyle = this.width;
-            ctx.textAlign = 'center';
-            ctx.fillText('Check Now',this.x,this.y,);
+        canvas.ontouchend = ()=>{
+            touch = false;
         }
     }
 }
