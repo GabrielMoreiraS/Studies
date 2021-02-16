@@ -49,7 +49,7 @@ function windowCheck(){
     }
 
     function warningCanvasHandler(){
-        canvasWarnings.innerHTML = `I'm sorry, your device does not match the minimum requirements.`;
+        canvasWarnings.innerHTML = `I'm sorry, your device does not match the minimum requirements. ${winWidth} ${winHeight}`;
         theCanvas.createCanvas(0,0);
         canvasHandler.style.height = '200px';
     }
