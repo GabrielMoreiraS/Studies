@@ -16,7 +16,7 @@ function windowCheck(){
     winWidth = window.innerWidth;
     winHeight = window.innerHeight;
 
-    if(winHeight > 600 || winWidth > 600){
+    if(winHeight > 570 || winWidth > 600){
         if(winWidth > 850){
             canvasW = 700;
             canvasH = 500;
