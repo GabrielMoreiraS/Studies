@@ -15,6 +15,7 @@ body.onload = function(){
 function windowCheck(){
     winWidth = window.innerWidth;
     winHeight = window.innerHeight; 
+    
     if(winHeight >= 560 || winWidth > 600){
         if(winWidth > 850){
             canvasW = 700;
@@ -31,6 +32,7 @@ function windowCheck(){
             fonts = 60;
             menuType = 'startMenu';
         }else if(winWidth < 600 && winWidth > 350){
+            mobile = true;
             canvasW = (canvasHandler.clientWidth - 40);
             canvasH = (canvasW - 100);
             theCanvas.createCanvas(canvasW,canvasH);
@@ -62,7 +64,8 @@ function windowCheck(){
     }
 
     function warningCanvasHandler(){
-        canvasWarnings.innerHTML = `I'm sorry, your device does not match the minimum requirements. But, try to turn your screen sideways, that might work...`;
+        canvasWarnings.innerHTML = `I'm sorry, your device does not match the minimum requirements. But,
+        try to turn your screen sideways, that might work...`;
         theCanvas.createCanvas(0,0);
         canvasHandler.style.height = '200px';
     }
@@ -154,11 +157,11 @@ var theCanvas = {
             buttonFront.builder();
             if(theCanvas.x && theCanvas.y){
                 if(buttonFront.screenButtons()){
-                    canvas.requestFullscreen();
-                    setTimeout(()=>{
-                        this.fullScreenCanvas();
-                        menuType = 'mainMenu';
-                    },1000)
+                    setInterval(()=>{
+                        canvas.requestFullscreen();
+                    },500);
+                    this.fullScreenCanvas();
+                    menuType = 'mainMenu';
                 }
             }
         }
@@ -168,10 +171,10 @@ var theCanvas = {
             var background, mainTitle, startButtonBack, startText, startButtonFront, quitButtonBack, quitText, quitButtonFront;
             background = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/startMenu.jpg');
             mainTitle = new Components('text',(this.width / 2),50,fonts,'rgb(120, 205, 245)','Main Menu','Calibri');
-            startButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)')
+            startButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)');
             startText = new Components('text',(this.width / 2),(this.height / 2),15,'rgb(120, 205, 245)','Start','Calibri');
             startButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(0,0,0,0)');
-            quitButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(10, 78, 204,0.5)')
+            quitButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(10, 78, 204,0.5)');
             quitText = new Components('text',(this.width / 2),(this.height / 2 + 40),15,'rgb(120, 205, 245)','Quit','Calibri');
             quitButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(0,0,0,0)');
             background.builder();
@@ -187,25 +190,31 @@ var theCanvas = {
                     menuType = 'gameEnviroment';
                 }
                 if(quitButtonFront.screenButtons()){
-                    location.reload();
+                    this.stop();
+                    setInterval(()=>{
+                        location.reload();
+                        setInterval(()=>{
+                            windowCheck();
+                            menuType = 'startMenu';
+                        },500);
+                    },500);
                 }
             }
         }
     },
     continueMenu: function(){
         if(menuType == 'continueMenu'){
-            // console.log('continueMenu')
             var background, mainTitle, continueButtonBack, continueText, continueButtonFront, restartButtonBack, restartText,
             restartButtonFront, quitButtonBack, quitText, quitButtonFront;
             background = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/startMenu.jpg');
             mainTitle = new Components('text',(this.width / 2),50,fonts,'rgb(120, 205, 245)','Main Menu','Calibri');
-            continueButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)')
+            continueButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)');
             continueText = new Components('text',(this.width / 2),(this.height / 2),15,'rgb(120, 205, 245)','Continue','Calibri');
             continueButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(0,0,0,0)');
-            restartButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(10, 78, 204,0.5)')
+            restartButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(10, 78, 204,0.5)');
             restartText = new Components('text',(this.width / 2),(this.height / 2 + 40),15,'rgb(120, 205, 245)','Restart','Calibri');
             restartButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(0,0,0,0)');
-            quitButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 60),60,30,'rgba(10, 78, 204,0.5)')
+            quitButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 60),60,30,'rgba(10, 78, 204,0.5)');
             quitText = new Components('text',(this.width / 2),(this.height / 2 + 80),15,'rgb(120, 205, 245)','Quit','Calibri');
             quitButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 60),60,30,'rgba(0,0,0,0)');
             background.builder();
@@ -227,7 +236,14 @@ var theCanvas = {
                     menuType = 'gameEnviroment';
                 }
                 if(quitButtonFront.screenButtons()){
-                    location.reload();
+                    this.stop();
+                    setInterval(()=>{
+                        location.reload();
+                        setInterval(()=>{
+                            windowCheck()
+                            menuType = 'startMenu';
+                        },500);
+                    },500);
                 }
             }
         }
@@ -284,7 +300,7 @@ class Components{
             right = (left + this.width);
             bottom = (top + this.height);
         }else{
-            top = this.y;
+            top = this.y; //+ (screen.width - canvas.height);        
             left = this.x;
             right = (left + this.width);
             bottom = (top + this.height);
