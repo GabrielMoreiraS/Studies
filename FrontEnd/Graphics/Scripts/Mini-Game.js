@@ -3,15 +3,13 @@ const body = document.body;
 const canvas = document.querySelector('[data-canvas]');
 const canvasWarnings = document.querySelector('.canvas-handler-warnings');
 const canvasHandler = document.querySelector('.canvas-handler');
-
 //VARIABLES:
 let winWidth, winHeight, canvasW, canvasH, menus, fonts, click, touch, menuType, character, obstacles, bullets;
-
 //INITIALIZATION:
 body.onload = function(){
     windowCheck();
 }
-//Device verification
+//SCREEN METER:
 function windowCheck(){
     winWidth = window.innerWidth;
     winHeight = window.innerHeight; 
@@ -32,7 +30,6 @@ function windowCheck(){
             fonts = 60;
             menuType = 'startMenu';
         }else if(winWidth < 600 && winWidth > 350){
-            mobile = true;
             canvasW = (canvasHandler.clientWidth - 40);
             canvasH = (canvasW - 100);
             theCanvas.createCanvas(canvasW,canvasH);
@@ -76,8 +73,7 @@ function windowCheck(){
 
     window.addEventListener('resize', windowCheck);
 }
-
-//Canvas options
+//CANVAS PROPERTIES:
 var theCanvas = {
     createCanvas: function(w,h){
         this.width = w;
@@ -126,7 +122,7 @@ var theCanvas = {
     },
     screenActionsDetector: function(){
         canvas.ontouchstart = (e)=>{
-            theCanvas.x = e.touches[0].pageX
+            theCanvas.x = e.touches[0].pageX;
             theCanvas.y = e.touches[0].pageY;
         }
         canvas.ontouchend = ()=>{
@@ -263,7 +259,7 @@ var theCanvas = {
         }
     }
 }
-//Components constructor
+//COMPONENTS CONSTRUCTOR:
 class Components{
     constructor(type,x,y,width,height,color,fonts){
         this.type = type;
@@ -317,7 +313,7 @@ class Components{
 
     }
 }
-//Updater
+//UPDATER:
 function refreshCanvas(){
     theCanvas.clearCanvas();
     menus();
