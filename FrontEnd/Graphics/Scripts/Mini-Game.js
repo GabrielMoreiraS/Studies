@@ -5,16 +5,16 @@ const canvasWarnings = document.querySelector('.canvas-handler-warnings');
 const canvasHandler = document.querySelector('.canvas-handler');
 
 //VARIABLES:
-let winWidth, winHeight, canvasW, canvasH, menus, fonts, touch, click;
+let winWidth, winHeight, canvasW, canvasH, menus, fonts, click, touch, menuType, character, obstacles, bullets;
 
 //INITIALIZATION:
 body.onload = function(){
     windowCheck();
 }
-
+//Device verification
 function windowCheck(){
     winWidth = window.innerWidth;
-    winHeight = window.innerHeight;
+    winHeight = window.innerHeight; 
 
     if(winHeight >= 560 || winWidth > 600){
         if(winWidth > 850){
@@ -22,25 +22,39 @@ function windowCheck(){
             canvasH = 500;
             theCanvas.createCanvas(canvasW,canvasH);
             canvasHandlerDefault();
+            fonts = 70;
+            menuType = 'startMenu';
         }else if(winWidth > 600 && winWidth < 850){
             canvasW = (canvasHandler.clientWidth - 60);
             canvasH = (canvasW - 100);
             theCanvas.createCanvas(canvasW,canvasH);
             canvasHandlerDefault();
+            fonts = 60;
+            menuType = 'startMenu';
         }else if(winWidth < 600 && winWidth > 350){
             canvasW = (canvasHandler.clientWidth - 40);
             canvasH = (canvasW - 100);
             theCanvas.createCanvas(canvasW,canvasH);
             canvasHandlerDefault();
+            fonts = 50;
+            menuType = 'startMenu';
         }else if(winWidth < 350){
+            fonts = 15;
             warningCanvasHandler();
         }
         menus = function(){
             if(winWidth > 600){
-                theCanvas.startMenu();
-                theCanvas.mainMenu();
-                theCanvas.continueMenu();
+                theCanvas.screenActionsDetector();
+                if(menuType == 'startMenu')
+                    theCanvas.startMenu();
+                if(menuType == 'mainMenu')
+                    theCanvas.mainMenu();
+                if(menuType == 'continueMenu')
+                    theCanvas.continueMenu();
+                if(menuType == 'gameEnviroment')
+                    theCanvas.gameEnviroment();
             }else{
+                fonts = 15;
                 theCanvas.warningMenu();
             }
         }
@@ -60,14 +74,32 @@ function windowCheck(){
 
     window.addEventListener('resize', windowCheck);
 }
-
+//Canvas options
 var theCanvas = {
     createCanvas: function(w,h){
         this.width = w;
         this.height = h;
         canvas.width = this.width;
         canvas.height = this.height;
+        canvas.style.position = 'unset';
+        body.style.overflow = "auto";
         this.start();
+        window.addEventListener('resize', windowCheck);
+    },
+    fullScreenCanvas: function(){
+        window.removeEventListener('resize', windowCheck);
+        canvas.style.position = 'absolute';
+        canvas.style.top = '-'+canvasHandler.offsetTop+'px';
+        canvas.style.left = '-'+(canvasHandler.offsetLeft)+'px';
+        body.style.overflow = "hidden";
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+        canvas.width = this.width;
+        canvas.height = this.height;
+        this.stop();
+        setTimeout(()=>{
+            this.start();
+        },1);
     },
     start: function(){
         this.canvasContext = canvas.getContext('2d');
@@ -81,67 +113,192 @@ var theCanvas = {
     },
     warningMenu: function(){
         var background, mainTitle;
-        background = new Components('background',0,0,this.width,this.height,'black');
-        mainTitle = new Components('mainTitle',(this.width / 2),50,15,'white');
+        background = new Components('backgroundColor',0,0,this.width,this.height,'black');
+        mainTitle = new Components('text',(this.width / 2),50,fonts,'white','Turn your device sideways, please.','Arial');
         background.builder();
         mainTitle.builder();
     },
+    screenActionsDetector: function(){
+        canvas.ontouchstart = (e)=>{
+            theCanvas.x = e.touches[0].pageX;
+            theCanvas.y = e.touches[0].pageY;
+        }
+        canvas.ontouchend = ()=>{
+            theCanvas.x = false;
+            theCanvas.y = false;
+        }
+        canvas.addEventListener('mousedown', (e)=>{
+            theCanvas.x = e.pageX;
+            theCanvas.y = e.pageY;
+        })
+        canvas.addEventListener('mouseup', ()=>{
+            theCanvas.x = false;
+            theCanvas.y = false;
+        })
+    },
     startMenu: function(){
+        if(menuType == 'startMenu'){
+            var background, mainTitle, buttonBack, buttonText, buttonFront;
+            background = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/startMenu.jpg');
+            mainTitle = new Components('text',(this.width / 2),50,fonts,'rgb(120, 205, 245)','Start The Game','Calibri');
+            buttonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)');
+            buttonText = new Components('text',(this.width / 2),(this.height / 2),15,'rgb(120, 205, 245)','Next','Calibri');
+            buttonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(0,0,0,0)','buttonFront');
+            background.builder();
+            mainTitle.builder();
+            buttonBack.builder();
+            buttonText.builder();
+            buttonFront.builder();
+            if(theCanvas.x && theCanvas){
+                if(buttonFront.screenButtons()){
+                    this.fullScreenCanvas();
+                    menuType = 'mainMenu';
+                }
+            }
+        }
     },
     mainMenu: function(){
-
+        if(menuType == 'mainMenu'){
+            var background, mainTitle, startButtonBack, startText, startButtonFront, quitButtonBack, quitText, quitButtonFront;
+            background = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/startMenu.jpg');
+            mainTitle = new Components('text',(this.width / 2),50,fonts,'rgb(120, 205, 245)','Main Menu','Calibri');
+            startButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)')
+            startText = new Components('text',(this.width / 2),(this.height / 2),15,'rgb(120, 205, 245)','Start','Calibri');
+            startButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(0,0,0,0)');
+            quitButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(10, 78, 204,0.5)')
+            quitText = new Components('text',(this.width / 2),(this.height / 2 + 40),15,'rgb(120, 205, 245)','Quit','Calibri');
+            quitButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(0,0,0,0)');
+            background.builder();
+            mainTitle.builder();
+            startButtonBack.builder();
+            startText.builder();
+            startButtonFront.builder();
+            quitButtonBack.builder();
+            quitText.builder();
+            quitButtonFront.builder();
+            if(theCanvas.x && theCanvas.y){
+                if(startButtonFront.screenButtons()){
+                    this.fullScreenCanvas();
+                    menuType = 'gameEnviroment';
+                }
+                if(quitButtonFront.screenButtons()){
+                    menuType = 'startMenu';
+                    windowCheck();
+                }
+            }
+        }
     },
     continueMenu: function(){
-
+        if(menuType == 'continueMenu'){
+            var background, mainTitle, continueButtonBack, continueText, continueButtonFront, restartButtonBack, restartText,
+            restartButtonFront, quitButtonBack, quitText, quitButtonFront;
+            background = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/startMenu.jpg');
+            mainTitle = new Components('text',(this.width / 2),50,fonts,'rgb(120, 205, 245)','Main Menu','Calibri');
+            continueButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)')
+            continueText = new Components('text',(this.width / 2),(this.height / 2),15,'rgb(120, 205, 245)','Continue','Calibri');
+            continueButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(0,0,0,0)');
+            restartButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(10, 78, 204,0.5)')
+            restartText = new Components('text',(this.width / 2),(this.height / 2 + 40),15,'rgb(120, 205, 245)','Restart','Calibri');
+            restartButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(0,0,0,0)');
+            quitButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 60),60,30,'rgba(10, 78, 204,0.5)')
+            quitText = new Components('text',(this.width / 2),(this.height / 2 + 80),15,'rgb(120, 205, 245)','Quit','Calibri');
+            quitButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 60),60,30,'rgba(0,0,0,0)');
+            background.builder();
+            mainTitle.builder();
+            continueButtonBack.builder();
+            continueText.builder();
+            continueButtonFront.builder();
+            restartButtonBack.builder();
+            restartText.builder();
+            restartButtonFront.builder();
+            quitButtonBack.builder();
+            quitText.builder();
+            quitButtonFront.builder();
+            if(theCanvas.x && theCanvas.y){
+                if(continueButtonFront.screenButtons()){
+                    menuType = 'gameEnviroment';
+                }
+                if(restartButtonFront.screenButtons()){
+                    menuType = 'gameEnviroment';
+                }
+                if(quitButtonFront.screenButtons()){
+                    menuType = 'startMenu';
+                    windowCheck();
+                }
+            }
+        }
+    },
+    gameEnviroment: function(){
+        if(menuType == 'gameEnviroment'){
+            var background, mainMenuButton;
+            background = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/gameEnviroment.jpg');
+            mainMenuButton = new Components('backgroundImage',2,2,30,30,'Media/Mini-Game/Images/mainMenu.png');
+            background.builder();
+            mainMenuButton.builder();
+            if(theCanvas.x && theCanvas.y){
+                if(mainMenuButton.screenButtons()){
+                    this.fullScreenCanvas();
+                    menuType = 'continueMenu';
+                }
+            }
+        }
     }
 }
-
+//Components constructor
 class Components{
-    constructor(type,x,y,width,height,color){
+    constructor(type,x,y,width,height,color,fonts){
         this.type = type;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.color = color;
+        this.image = new Image();
+        this.font = fonts;
     }
     builder(){
         var ctx = theCanvas.canvasContext;
-        //The warning menu
-        if(this.type === 'background'){
+        if(this.type === 'button' || this.type === 'bullets' || this.type === 'backgroundColor'){
             ctx.fillStyle = this.color;
             ctx.fillRect(this.x,this.y,this.width,this.height);
         }
-        if(this.type === 'mainTitle'){
-            ctx.font = `${this.width}px Arial`;
+        if(this.type === 'text'){
+            ctx.font = `${this.width}px ${this.font}`;
             ctx.fillStyle = this.height;
             ctx.textAlign = 'center';
-            ctx.fillText('Turn your device sideways, please.',this.x,this.y);
+            ctx.fillText(this.color,this.x,this.y);
         }
-        //The main menu
+        if(this.type === 'backgroundImage'){
+            this.image.src = this.color;
+            ctx.drawImage(this.image,this.x,this.y,this.width,this.height);
+        }
     }
     screenButtons(){
         var top, left, right, bottom;
-        top = this.y + canvasHandler.offsetTop;
-        left = this.x + canvas.offsetLeft;
-        right = (left + this.width);
-        bottom = (top + this.height);
-        canvas.ontouchstart = (e)=>{
-            var x = e.touches[0].pageX;
-            var y = e.touches[0].pageY;
-            if(top > y || left > x || bottom < y || right < x){
-                return touch = false;
-                
-            }else{
-                return touch = true;
-            }
+        if(menuType == 'startMenu'){
+            top = this.y + canvasHandler.offsetTop;
+            left = (canvas.offsetLeft + this.x + canvasHandler.offsetLeft);
+            right = (left + this.width);
+            bottom = (top + this.height);
+        }else{
+            top = this.y;
+            left = this.x;
+            right = (left + this.width);
+            bottom = (top + this.height);
         }
-        canvas.ontouchend = ()=>{
-            touch = false;
+        if(top > theCanvas.y || left > theCanvas.x || bottom < theCanvas.y || right < theCanvas.x){
+            return false;    
         }
+        return true;
+    }
+    obstacles(){
+
+    }
+    bullets(){
+
     }
 }
-
+//Updater
 function refreshCanvas(){
     theCanvas.clearCanvas();
     menus();
