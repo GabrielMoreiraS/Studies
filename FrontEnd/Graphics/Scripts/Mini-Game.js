@@ -15,7 +15,6 @@ body.onload = function(){
 function windowCheck(){
     winWidth = window.innerWidth;
     winHeight = window.innerHeight; 
-
     if(winHeight >= 560 || winWidth > 600){
         if(winWidth > 850){
             canvasW = 700;
@@ -74,6 +73,7 @@ function windowCheck(){
 
     window.addEventListener('resize', windowCheck);
 }
+
 //Canvas options
 var theCanvas = {
     createCanvas: function(w,h){
@@ -83,7 +83,10 @@ var theCanvas = {
         canvas.height = this.height;
         canvas.style.position = 'unset';
         body.style.overflow = "auto";
-        this.start();
+        this.stop();
+        setTimeout(()=>{
+            this.start();
+        },1);
         window.addEventListener('resize', windowCheck);
     },
     fullScreenCanvas: function(){
@@ -92,8 +95,8 @@ var theCanvas = {
         canvas.style.top = '-'+canvasHandler.offsetTop+'px';
         canvas.style.left = '-'+(canvasHandler.offsetLeft)+'px';
         body.style.overflow = "hidden";
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
+        this.width = screen.width;
+        this.height = screen.height;
         canvas.width = this.width;
         canvas.height = this.height;
         this.stop();
@@ -120,7 +123,7 @@ var theCanvas = {
     },
     screenActionsDetector: function(){
         canvas.ontouchstart = (e)=>{
-            theCanvas.x = e.touches[0].pageX;
+            theCanvas.x = e.touches[0].pageX
             theCanvas.y = e.touches[0].pageY;
         }
         canvas.ontouchend = ()=>{
@@ -149,10 +152,13 @@ var theCanvas = {
             buttonBack.builder();
             buttonText.builder();
             buttonFront.builder();
-            if(theCanvas.x && theCanvas){
+            if(theCanvas.x && theCanvas.y){
                 if(buttonFront.screenButtons()){
-                    this.fullScreenCanvas();
-                    menuType = 'mainMenu';
+                    canvas.requestFullscreen();
+                    setTimeout(()=>{
+                        this.fullScreenCanvas();
+                        menuType = 'mainMenu';
+                    },1000)
                 }
             }
         }
@@ -178,18 +184,17 @@ var theCanvas = {
             quitButtonFront.builder();
             if(theCanvas.x && theCanvas.y){
                 if(startButtonFront.screenButtons()){
-                    this.fullScreenCanvas();
                     menuType = 'gameEnviroment';
                 }
                 if(quitButtonFront.screenButtons()){
-                    menuType = 'startMenu';
-                    windowCheck();
+                    location.reload();
                 }
             }
         }
     },
     continueMenu: function(){
         if(menuType == 'continueMenu'){
+            // console.log('continueMenu')
             var background, mainTitle, continueButtonBack, continueText, continueButtonFront, restartButtonBack, restartText,
             restartButtonFront, quitButtonBack, quitText, quitButtonFront;
             background = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/startMenu.jpg');
@@ -222,8 +227,7 @@ var theCanvas = {
                     menuType = 'gameEnviroment';
                 }
                 if(quitButtonFront.screenButtons()){
-                    menuType = 'startMenu';
-                    windowCheck();
+                    location.reload();
                 }
             }
         }
@@ -237,7 +241,6 @@ var theCanvas = {
             mainMenuButton.builder();
             if(theCanvas.x && theCanvas.y){
                 if(mainMenuButton.screenButtons()){
-                    this.fullScreenCanvas();
                     menuType = 'continueMenu';
                 }
             }
