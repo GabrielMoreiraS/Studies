@@ -62,7 +62,7 @@ function windowCheck(){
     }
 
     function warningCanvasHandler(){
-        canvasWarnings.innerHTML = `I'm sorry, your device does not match the minimum requirements. ${winWidth} ${winHeight}`;
+        canvasWarnings.innerHTML = `I'm sorry, your device does not match the minimum requirements. But, try to turn your screen sideways, that might work...`;
         theCanvas.createCanvas(0,0);
         canvasHandler.style.height = '200px';
     }
