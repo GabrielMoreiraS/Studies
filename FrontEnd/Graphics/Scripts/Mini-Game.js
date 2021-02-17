@@ -300,7 +300,7 @@ class Components{
             right = (left + this.width);
             bottom = (top + this.height);
         }else{
-            top = this.y; //+ (screen.width - canvas.height);        
+            top = this.y;        
             left = this.x;
             right = (left + this.width);
             bottom = (top + this.height);
