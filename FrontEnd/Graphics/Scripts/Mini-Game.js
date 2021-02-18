@@ -4,65 +4,72 @@ const canvas = document.querySelector('[data-canvas]');
 const canvasWarnings = document.querySelector('.canvas-handler-warnings');
 const canvasHandler = document.querySelector('.canvas-handler');
 //VARIABLES:
-let winWidth, winHeight, canvasW, canvasH, menus, fonts, click, touch, menuType, character, obstacles, bullets;
+let winWidth, winHeight, canvasW, canvasH, menus, fonts, menuType, character, obstacles, bullets, actualMenu;
 //INITIALIZATION:
 body.onload = function(){
     windowCheck();
 }
 //SCREEN METER:
 function windowCheck(){
-    winWidth = window.innerWidth;
-    winHeight = window.innerHeight; 
-    
-    if(winHeight >= 560 || winWidth > 600){
+    winWidth = screen.width;
+    winHeight = screen.height; 
+    if(winHeight >= 600 && winWidth >= 300 || winWidth >= 600 && winHeight >= 600 || winWidth >= 600){
+        canvasHandlerDefault();
+        if(actualMenu == undefined){
+            menuType = 'startMenu';
+        }else{
+            menuType = actualMenu;
+            if(menuType != 'startMenu'){
+                canvas.requestFullscreen();
+                setTimeout(()=>{
+                    theCanvas.fullScreenCanvas();
+                },500)
+            }
+        }
         if(winWidth > 850){
             canvasW = 700;
             canvasH = 500;
             theCanvas.createCanvas(canvasW,canvasH);
-            canvasHandlerDefault();
             fonts = 70;
-            menuType = 'startMenu';
         }else if(winWidth > 600 && winWidth < 850){
             canvasW = (canvasHandler.clientWidth - 60);
             canvasH = (canvasW - 100);
             theCanvas.createCanvas(canvasW,canvasH);
-            canvasHandlerDefault();
             fonts = 60;
-            menuType = 'startMenu';
-        }else if(winWidth < 600 && winWidth > 350){
+        }else if(winWidth < 600 && winWidth > 300){
             canvasW = (canvasHandler.clientWidth - 40);
             canvasH = (canvasW - 100);
             theCanvas.createCanvas(canvasW,canvasH);
             canvasHandlerDefault();
             fonts = 50;
-            menuType = 'startMenu';
-        }else if(winWidth < 350){
-            fonts = 15;
-            warningCanvasHandler();
         }
         menus = function(){
-            if(winWidth > 600){
+            if(winWidth >= 600){
                 theCanvas.screenActionsDetector();
                 if(menuType == 'startMenu')
                     theCanvas.startMenu();
-                if(menuType == 'mainMenu')
+                if(menuType == 'mainMenu'){
                     theCanvas.mainMenu();
-                if(menuType == 'continueMenu')
+                }   
+                    
+                if(menuType == 'continueMenu'){
                     theCanvas.continueMenu();
-                if(menuType == 'gameEnviroment')
+                }
+                    
+                if(menuType == 'gameEnviroment'){
                     theCanvas.gameEnviroment();
+                }
+                    
             }else{
-                fonts = 15;
+                fonts = 12;
                 theCanvas.warningMenu();
             }
         }
     }else{
         warningCanvasHandler();
     }
-
     function warningCanvasHandler(){
-        canvasWarnings.innerHTML = `I'm sorry, your device does not match the minimum requirements. But,
-        try to turn your screen sideways, that might work...`;
+        canvasWarnings.innerHTML = `I'm sorry, your device does not match the minimum requirements.`;
         theCanvas.createCanvas(0,0);
         canvasHandler.style.height = '200px';
     }
@@ -70,7 +77,6 @@ function windowCheck(){
         canvasWarnings.innerHTML = '';
         canvasHandler.style.height = '100%';
     }
-
     window.addEventListener('resize', windowCheck);
 }
 //CANVAS PROPERTIES:
@@ -85,11 +91,9 @@ var theCanvas = {
         this.stop();
         setTimeout(()=>{
             this.start();
-        },1);
-        window.addEventListener('resize', windowCheck);
+        },500);
     },
     fullScreenCanvas: function(){
-        window.removeEventListener('resize', windowCheck);
         canvas.style.position = 'absolute';
         canvas.style.top = '-'+canvasHandler.offsetTop+'px';
         canvas.style.left = '-'+(canvasHandler.offsetLeft)+'px';
@@ -113,12 +117,13 @@ var theCanvas = {
     clearCanvas: function(){
         this.canvasContext.clearRect(0,0,this.width,this.height);
     },
-    warningMenu: function(){
-        var background, mainTitle;
-        background = new Components('backgroundColor',0,0,this.width,this.height,'black');
-        mainTitle = new Components('text',(this.width / 2),50,fonts,'white','Turn your device sideways, please.','Arial');
-        background.builder();
-        mainTitle.builder();
+    removeFullScreen: function(){
+        setTimeout(()=>{
+            location.reload();
+            setTimeout(()=>{
+                menuType = 'startMenu';
+            },500);
+        },500);
     },
     screenActionsDetector: function(){
         canvas.ontouchstart = (e)=>{
@@ -138,6 +143,13 @@ var theCanvas = {
             theCanvas.y = false;
         })
     },
+    warningMenu: function(){
+        var background, mainTitle;
+        background = new Components('backgroundColor',0,0,this.width,this.height,'black');
+        mainTitle = new Components('text',(this.width / 2),50,fonts,'white','Turn your device sideways, please.','Arial');
+        background.builder();
+        mainTitle.builder() 
+    },
     startMenu: function(){
         if(menuType == 'startMenu'){
             var background, mainTitle, buttonBack, buttonText, buttonFront;
@@ -153,11 +165,14 @@ var theCanvas = {
             buttonFront.builder();
             if(theCanvas.x && theCanvas.y){
                 if(buttonFront.screenButtons()){
-                    setInterval(()=>{
+                    setTimeout(()=>{
                         canvas.requestFullscreen();
+                        setTimeout(()=>{
+                            this.fullScreenCanvas();
+                            menuType = 'mainMenu';
+                            actualMenu = menuType;
+                        },50);
                     },500);
-                    this.fullScreenCanvas();
-                    menuType = 'mainMenu';
                 }
             }
         }
@@ -184,16 +199,10 @@ var theCanvas = {
             if(theCanvas.x && theCanvas.y){
                 if(startButtonFront.screenButtons()){
                     menuType = 'gameEnviroment';
+                    actualMenu = menuType;
                 }
                 if(quitButtonFront.screenButtons()){
-                    this.stop();
-                    setInterval(()=>{
-                        location.reload();
-                        setInterval(()=>{
-                            windowCheck();
-                            menuType = 'startMenu';
-                        },500);
-                    },500);
+                    this.removeFullScreen();
                 }
             }
         }
@@ -227,19 +236,14 @@ var theCanvas = {
             if(theCanvas.x && theCanvas.y){
                 if(continueButtonFront.screenButtons()){
                     menuType = 'gameEnviroment';
+                    actualMenu = menuType;
                 }
                 if(restartButtonFront.screenButtons()){
                     menuType = 'gameEnviroment';
+                    actualMenu = menuType;
                 }
                 if(quitButtonFront.screenButtons()){
-                    this.stop();
-                    setInterval(()=>{
-                        location.reload();
-                        setInterval(()=>{
-                            windowCheck()
-                            menuType = 'startMenu';
-                        },500);
-                    },500);
+                    this.removeFullScreen();
                 }
             }
         }
@@ -254,6 +258,7 @@ var theCanvas = {
             if(theCanvas.x && theCanvas.y){
                 if(mainMenuButton.screenButtons()){
                     menuType = 'continueMenu';
+                    actualMenu = menuType;
                 }
             }
         }
