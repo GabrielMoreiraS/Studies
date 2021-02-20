@@ -151,8 +151,8 @@ var theCanvas = {
         },500);
     },
     checkFullScreen: function(){
-        actualHeight[0] = window.innerHeight;
-        if(actualHeight[0] != winHeight){
+        actualHeight = window.innerHeight;
+        if(actualHeight != winHeight){
             var fullScreeButton;
             fullScreeButton = new Components('imageButton',(this.width - 32),2,30,30,'Media/Mini-Game/Images/expandCanvas.png');
             fullScreeButton.builder();
