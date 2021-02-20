@@ -154,12 +154,14 @@ var theCanvas = {
         actualHeight = window.innerHeight;
         if(actualHeight != winHeight){
             var fullScreeButton;
-            fullScreeButton = new Components('imageButton',(this.width - 22),2,20,20,'Media/Mini-Game/Images/expandCanvas.png');
+            fullScreeButton = new Components('imageButton',(this.width - 32),2,30,30,'Media/Mini-Game/Images/expandCanvas.png');
             fullScreeButton.builder();
             if(theCanvas.x && theCanvas.y){
                 if(fullScreeButton.screenButtons()){
                     this.stop();
-                    canvas.requestFullscreen();
+                    setTimeout(()=>{
+                        canvas.requestFullscreen();
+                    },100)
                     setTimeout(()=>{
                         this.start();
                     },500);
