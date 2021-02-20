@@ -4,7 +4,7 @@ const canvas = document.querySelector('[data-canvas]');
 const canvasWarnings = document.querySelector('.canvas-handler-warnings');
 const canvasHandler = document.querySelector('.canvas-handler');
 //VARIABLES:
-let winWidth, winHeight, canvasW, canvasH, menus, fontTitle, fontButton, menuType, character, obstacles, bullets, actualMenu;
+let winWidth, winHeight, canvasW, canvasH, menus, fontTitle, fontButton, menuType, character, obstacles, bullets, actualMenu, actualHeight;
 //INITIALIZATION:
 body.onload = function(){
     windowCheck();
@@ -47,14 +47,18 @@ function windowCheck(){
         menus = function(){
             if(winWidth >= 600){
                 theCanvas.screenActionsDetector();
-                if(menuType == 'startMenu')
+                if(menuType == 'startMenu'){
                     theCanvas.startMenu();
-                if(menuType == 'mainMenu')
+                }
+                if(menuType == 'mainMenu'){
                     theCanvas.mainMenu();
-                if(menuType == 'continueMenu')
+                }
+                if(menuType == 'continueMenu'){
                     theCanvas.continueMenu();
-                if(menuType == 'gameEnviroment')
+                }
+                if(menuType == 'gameEnviroment'){
                     theCanvas.gameEnviroment();
+                }
             }else{
                 fonts(14,0);
                 theCanvas.warningMenu();
@@ -84,49 +88,15 @@ function windowCheck(){
 }
 //CANVAS PROPERTIES:
 var theCanvas = {
-    createCanvas: function(w,h){
-        this.width = w;
-        this.height = h;
-        canvas.width = this.width;
-        canvas.height = this.height;
-        canvas.style.position = 'unset';
-        body.style.overflow = "auto";
-        this.stop();
-        setTimeout(()=>{
-            this.start();
-        },500);
-    },
-    fullScreenCanvas: function(){
-        canvas.style.position = 'absolute';
-        canvas.style.top = '-'+canvasHandler.offsetTop+'px';
-        canvas.style.left = '-'+(canvasHandler.offsetLeft)+'px';
-        body.style.overflow = "hidden";
-        this.width = screen.width;
-        this.height = screen.height;
-        canvas.width = this.width;
-        canvas.height = this.height;
-        this.stop();
-        setTimeout(()=>{
-            this.start();
-        },1);
-    },
     start: function(){
         this.canvasContext = canvas.getContext('2d');
-        this.interval = setInterval(refreshCanvas,1);
+        this.interval = setInterval(refreshCanvas,frames);
     },
     stop: function(){
         clearInterval(this.interval);
     },
     clearCanvas: function(){
         this.canvasContext.clearRect(0,0,this.width,this.height);
-    },
-    removeFullScreen: function(){
-        setTimeout(()=>{
-            location.reload();
-            setTimeout(()=>{
-                menuType = 'startMenu';
-            },500);
-        },500);
     },
     screenActionsDetector: function(){
         canvas.ontouchstart = (e)=>{
@@ -145,6 +115,57 @@ var theCanvas = {
             theCanvas.x = false;
             theCanvas.y = false;
         })
+    },
+    createCanvas: function(w,h){
+        this.width = w;
+        this.height = h;
+        canvas.width = this.width;
+        canvas.height = this.height;
+        canvas.style.position = 'unset';
+        body.style.overflow = "auto";
+        this.stop();
+        setTimeout(()=>{
+            this.start();
+        },1);
+    },
+    fullScreenCanvas: function(){
+        canvas.style.position = 'absolute';
+        canvas.style.top = '-'+canvasHandler.offsetTop+'px';
+        canvas.style.left = '-'+(canvasHandler.offsetLeft)+'px';
+        body.style.overflow = "hidden";
+        this.width = screen.width;
+        this.height = screen.height;
+        canvas.width = this.width;
+        canvas.height = this.height;
+        this.stop();
+        setTimeout(()=>{
+            this.start();
+        },1);
+    },
+    removeFullScreen: function(){
+        setTimeout(()=>{
+            location.reload();
+            setTimeout(()=>{
+                menuType = 'startMenu';
+            },500);
+        },500);
+    },
+    checkFullScreen: function(){
+        actualHeight = window.innerHeight;
+        if(actualHeight != winHeight){
+            var fullScreeButton;
+            fullScreeButton = new Components('imageButton',(this.width - 22),2,20,20,'Media/Mini-Game/Images/expandCanvas.png');
+            fullScreeButton.builder();
+            if(theCanvas.x && theCanvas.y){
+                if(fullScreeButton.screenButtons()){
+                    this.stop();
+                    canvas.requestFullscreen();
+                    setTimeout(()=>{
+                        this.start();
+                    },500);
+                }
+            }
+        }
     },
     warningMenu: function(){
         var background, mainTitle;
@@ -182,7 +203,7 @@ var theCanvas = {
     },
     mainMenu: function(){
         if(menuType == 'mainMenu'){
-            var background, mainTitle, startButtonBack, startText, startButtonFront, quitButtonBack, quitText, quitButtonFront, fullScreeButton;
+            var background, mainTitle, startButtonBack, startText, startButtonFront, quitButtonBack, quitText, quitButtonFront;
             background = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/startMenu.jpg');
             mainTitle = new Components('text',(this.width / 2),50,fontTitle,'rgb(120, 205, 245)','Main Menu','Calibri');
             startButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)');
@@ -191,7 +212,6 @@ var theCanvas = {
             quitButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(10, 78, 204,0.5)');
             quitText = new Components('text',(this.width / 2),(this.height / 2 + 40),fontButton,'rgb(120, 205, 245)','Quit','Calibri');
             quitButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(0,0,0,0)');
-            fullScreeButton = new Components('imageButton',(this.width - 22),2,20,20,'Media/Mini-Game/Images/expandCanvas.png');
             background.builder();
             mainTitle.builder();
             startButtonBack.builder();
@@ -200,7 +220,6 @@ var theCanvas = {
             quitButtonBack.builder();
             quitText.builder();
             quitButtonFront.builder();
-            fullScreeButton.builder();
             if(theCanvas.x && theCanvas.y){
                 if(startButtonFront.screenButtons()){
                     menuType = 'gameEnviroment';
@@ -209,18 +228,14 @@ var theCanvas = {
                 if(quitButtonFront.screenButtons()){
                     this.removeFullScreen();
                 }
-                if(fullScreeButton.screenButtons()){
-                    setTimeout(()=>{
-                        canvas.requestFullscreen();
-                    },500);
-                }
             }
+            this.checkFullScreen();
         }
     },
     continueMenu: function(){
         if(menuType == 'continueMenu'){
             var background, mainTitle, continueButtonBack, continueText, continueButtonFront, restartButtonBack, restartText,
-            restartButtonFront, quitButtonBack, quitText, quitButtonFront, fullScreeButton;
+            restartButtonFront, quitButtonBack, quitText, quitButtonFront;
             background = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/startMenu.jpg');
             mainTitle = new Components('text',(this.width / 2),50,fontTitle,'rgb(120, 205, 245)','Main Menu','Calibri');
             continueButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)');
@@ -232,7 +247,6 @@ var theCanvas = {
             quitButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 60),60,30,'rgba(10, 78, 204,0.5)');
             quitText = new Components('text',(this.width / 2),(this.height / 2 + 80),fontButton,'rgb(120, 205, 245)','Quit','Calibri');
             quitButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 60),60,30,'rgba(0,0,0,0)');
-            fullScreeButton = new Components('imageButton',(this.width - 22),2,20,20,'Media/Mini-Game/Images/expandCanvas.png');
             background.builder();
             mainTitle.builder();
             continueButtonBack.builder();
@@ -244,7 +258,6 @@ var theCanvas = {
             quitButtonBack.builder();
             quitText.builder();
             quitButtonFront.builder();
-            fullScreeButton.builder();
             if(theCanvas.x && theCanvas.y){
                 if(continueButtonFront.screenButtons()){
                     menuType = 'gameEnviroment';
@@ -257,12 +270,8 @@ var theCanvas = {
                 if(quitButtonFront.screenButtons()){
                     this.removeFullScreen();
                 }
-                if(fullScreeButton.screenButtons()){
-                    setTimeout(()=>{
-                        canvas.requestFullscreen();
-                    },500);
-                }
             }
+            this.checkFullScreen();
         }
     },
     gameEnviroment: function(){
@@ -278,6 +287,7 @@ var theCanvas = {
                     actualMenu = menuType;
                 }
             }
+            this.checkFullScreen();
         }
     }
 }
