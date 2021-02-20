@@ -4,7 +4,7 @@ const canvas = document.querySelector('[data-canvas]');
 const canvasWarnings = document.querySelector('.canvas-handler-warnings');
 const canvasHandler = document.querySelector('.canvas-handler');
 //VARIABLES:
-let winWidth, winHeight, canvasW, canvasH, menus, fontTitle, fontButton, menuType, character, obstacles, bullets, actualMenu, actualHeight;
+let winWidth, winHeight, canvasW, canvasH, menus, fontTitle, fontButton, menuType, character, obstacles, bullets, actualMenu, actualHeight = [];
 //INITIALIZATION:
 body.onload = function(){
     windowCheck();
@@ -151,23 +151,24 @@ var theCanvas = {
         },500);
     },
     checkFullScreen: function(){
-        actualHeight = window.innerHeight;
-        if(actualHeight != winHeight){
+        actualHeight[0] = window.innerHeight;
+        if(actualHeight[0] != winHeight){
             var fullScreeButton;
             fullScreeButton = new Components('imageButton',(this.width - 32),2,30,30,'Media/Mini-Game/Images/expandCanvas.png');
             fullScreeButton.builder();
-            if(theCanvas.x && theCanvas.y){
+            if(theCanvas.x && theCanvas.y && actualHeight[1] == undefined){
                 if(fullScreeButton.screenButtons()){
+                    actualHeight[1] = 1;
                     this.stop();
-                    setTimeout(()=>{
-                        canvas.requestFullscreen();
-                    },100)
+                    canvas.requestFullscreen();
                     setTimeout(()=>{
                         this.start();
+                        actualHeight[1] = undefined;
                     },500);
                 }
             }
         }
+        
     },
     warningMenu: function(){
         var background, mainTitle;
