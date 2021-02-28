@@ -127,5 +127,5 @@ html,body{
     top: calc(100% / 2);
     left: calc(100% / 2);
     transform: translate(-50%, -50%);
-    color:white;
+    color:rgb(255, 255, 255);
 }

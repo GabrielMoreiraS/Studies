@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Canvas</title>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <link rel="stylesheet" type="text/css" href="../../../style.css"/>
+        <link rel="stylesheet" type="text/css" href="Styles/Mini-Game.css"/>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <a href="../front-end.html">Go back</a>
+                <h1 class="title">Canvas</h1>
+            </div>
+            <div class="topic">
+                <h2 class="title-box">Mini-Game</h2>
+                <div class="box">
+                    <div id='ch0' class="canvas-handler">
+                        <p id='chw0' class="canvas-handler-warnings"></p>
+                        <canvas data-canvas-mini-game></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="topic">
+                <h2 class="title-box">Possibilities</h2>
+                <div class="box">
+                    <div id='chA' class="canvas-handler">
+                        <p id='chwA' class="canvas-handler-warnings"></p>
+                        <canvas data-canvas></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="Scripts/canvasMini-Game.js"></script>
+        <script>
+            //ALL REFERENCES:
+            const canvasAll = document.querySelector('[data-canvas]');
+            const canvasWarningsA = document.querySelector('#chwA');
+            const canvasHandlerA = document.querySelector('#chA');
+            let winWidthA, winHeightA, canvasWA, canvasHA;
+
+            var windowCheckA = ()=>{
+                winWidthA = window.innerWidth;
+                winHeightA = screen.height;
+                if(winWidthA >= 600 || winHeightA >= 600){
+                    canvasHandlerDefaultA();
+                    if(winWidthA > 850){
+                        canvasWA = 700;
+                        canvasHA = 500;
+                        theCanvasA.createCanvasA(canvasWA,26);
+                    }else if(winWidthA < 850 && winWidthA >= 600){
+                        canvasWA = (canvasHandlerA.clientWidth - 60);
+                        canvasHA = (canvasWA - 160);
+                        theCanvasA.createCanvasA(canvasWA,20);
+                    }else if(winWidthA > 350 && winWidthA < 600){
+                        canvasWA = (canvasHandlerA.clientWidth - 60);
+                        canvasHA = (canvasWA - 160);
+                        theCanvasA.createCanvasA(canvasWA,14,'not');
+                    }
+                }else{
+                    warningCanvasHandlerA();
+                }
+                function warningCanvasHandlerA(){
+                    canvasWarningsA.innerHTML = `I'm sorry, your device does not match the minimum requirements.`;
+                    theCanvasA.createCanvasA(0,0);
+                    canvasHandlerA.style.height = '200px';
+                }
+                function canvasHandlerDefaultA(){
+                    canvasWarningsA.innerHTML = '';
+                    canvasHandlerA.style.height = '100%';
+                }
+            }
+            window.addEventListener('resize', windowCheckA);
+            
+            const theCanvasA = {
+                createCanvasA: function(w,f,c){
+                    this.ctx = canvasAll.getContext('2d');
+                    if(c == undefined){
+                        this.w = w;
+                        this.f = f;
+                        canvasAll.width = this.w;
+                        canvasAll.height = 1900;
+                        canvasAll.style.backgroundColor = "white";
+                        canvasAll.style.marginBottom = '-4px';
+                        setTimeout(()=>{
+                            this.start();
+                        },1);
+                    }else{
+                        this.w = w;
+                        this.f = f;
+                        canvasAll.width = this.w;
+                        canvasAll.height = 200;
+                        canvasAll.style.backgroundColor = "white";
+                        canvasAll.style.marginBottom = '-4px';
+                        this.warningMenuA();
+                    }
+                },
+                warningMenuA: function(){
+                    this.ctx.fillStyle = 'black';
+                    this.ctx.fillRect(0,0,this.w,150);
+
+                    this.ctx.font = `${this.f}px Arial`;
+                    this.ctx.fillStyle = 'white';
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText('Turn your device sideways, please.',this.w / 2,50);
+                },
+                start: function(){
+                    //DRAWING RECTS:
+                    this.ctx.font = `${this.f}px Calibri`;
+                    this.ctx.strokeText('Using "fillStyle" and "fillRect":',10,20);
+                    
+                    this.ctx.fillStyle = 'rgb(64, 33, 114)';
+                    this.ctx.fillRect((canvasWA / 2 - 50),60,100,100);
+
+                    this.ctx.fillStyle = 'rgb(62, 141, 141)';
+                    this.ctx.fillRect((canvasWA / 2 + 50),160,100,100);
+
+                    this.ctx.fillStyle = 'rgb(21, 102, 156)';
+                    this.ctx.fillRect((canvasWA / 2 - 150),160,100,100);
+
+                    this.ctx.fillStyle = 'rgb(47, 39, 160)';
+                    this.ctx.fillRect((canvasWA / 2 - 50),260,100,100);
+
+                    //DRAWING LINES:
+                    this.ctx.font = `${this.f}px Calibri`;
+                    this.ctx.strokeText('Using "moveTo", "lineTo" and "stroke()":',10,420);
+
+                    this.ctx.moveTo((canvasWA / 2),470);
+                    this.ctx.lineTo((canvasWA / 2 - 100),640);
+                    this.ctx.stroke();
+
+                    this.ctx.moveTo((canvasWA / 2),470);
+                    this.ctx.lineTo((canvasWA / 2 + 100),640);
+                    this.ctx.stroke();
+
+                    this.ctx.moveTo((canvasWA / 2 + 100),640);
+                    this.ctx.lineTo((canvasWA / 2 - 100),640);
+                    this.ctx.stroke();
+
+                    //DRAWING CIRCLES:
+                    this.ctx.font = `${this.f}px Calibri`;
+                    this.ctx.strokeText('Using "beginPath()", "arc" and "stroke()":',10,690);
+
+                    this.ctx.beginPath();
+                    this.ctx.arc((canvasWA / 2),830,100,0,2*Math.PI);
+                    this.ctx.stroke();
+
+                    //DRAWING LINEAR GRADIENTS:
+                    this.ctx.font = `${this.f}px Calibri`;
+                    this.ctx.strokeText('Using "createLinearGradient()" and "addColorStop()":',10,990);
+
+                    var lGrd = this.ctx.createLinearGradient((canvasWA / - 200),1040,600,1040)
+                    lGrd.addColorStop(0,'rgb(40, 221, 126)');
+                    lGrd.addColorStop(0.5,'rgb(88, 157, 184)');
+                    lGrd.addColorStop(1,'blue');
+
+                    this.ctx.fillStyle = lGrd;
+                    this.ctx.fillRect((canvasWA / 2 - 200),1040,400,200);
+
+                    //DRAWING RADIAL GRADIENTS:
+                    this.ctx.font = `${this.f}px Calibri`;
+                    this.ctx.strokeText('Using "createRadialGradient()" and "addColorStop()":',10,1300);
+
+                    var rGrd = this.ctx.createRadialGradient((canvasWA / 2),1460,30,(canvasWA / 2),1460,350);
+                    rGrd.addColorStop(0,'rgb(40, 221, 126)');
+                    rGrd.addColorStop(0.5,'rgb(88, 157, 184)');
+                    rGrd.addColorStop(1,'blue');
+                    
+
+                    this.ctx.fillStyle = rGrd;
+                    this.ctx.fillRect((canvasWA / 2 - 200),1360,400,200);
+                }
+            }
+            windowCheckA();
+        </script>
+    </body>
+</html>
