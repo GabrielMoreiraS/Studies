@@ -6,6 +6,7 @@ const canvasHandler = document.querySelector('#ch0');
 //GENERAL VARIABLES:
 var winWidth, winHeight, canvasW, canvasH, menus, menuType, actualMenu, actualHeight, currentGame;
 //CHARACTERS VARIABLES:
+var character = [];
 //INITIALIZATION:
 body.onload = windowCheck;
 //SCREEN METER:
@@ -18,7 +19,7 @@ function windowCheck(){
             menuType = 'startMenu';
         }else{
             menuType = actualMenu;
-            if(menuType != 'startMenu' && menuType != 'gameEnviroment'){
+            if(menuType != 'startMenu' && menuType != 'newGameEnviroment' || menuType != 'startMenu' && menuType != 'continueGameEnviroment'){
                 setTimeout(()=>{
                     canvas.requestFullscreen();
                     setTimeout(()=>{
@@ -26,7 +27,7 @@ function windowCheck(){
                     },100)
                 },500)
             }
-            if(menuType != 'startMenu' && menuType == 'gameEnviroment'){
+            if(menuType != 'startMenu' && menuType == 'newGameEnviroment' || menuType != 'startMenu' && menuType == 'continueGameEnviroment'){
                 setTimeout(()=>{
                     canvas.requestFullscreen();
                     setTimeout(()=>{
@@ -70,7 +71,7 @@ function windowCheck(){
                 if(menuType == 'continueMenu'){
                     theCanvas.continueMenu();
                 }
-                if(menuType == 'gameEnviroment'){
+                if(menuType == 'newGameEnviroment' || menuType == 'continueGameEnviroment'){
                     theCanvas.gameEnviroment();
                 }
             }else{
@@ -150,10 +151,6 @@ const theCanvas = {
         this.height = screen.height;
         canvas.width = this.width;
         canvas.height = this.height;
-        this.stop();
-        setTimeout(()=>{
-            this.start();
-        },500);
     },
     removeFullScreen: function(){
         this.stop();
@@ -232,15 +229,15 @@ const theCanvas = {
             quitButtonFront.builder();
             if(theCanvas.x && theCanvas.y){
                 if(startButtonFront.screenButtons()){
-                    menuType = 'gameEnviroment';
+                    menuType = 'newGameEnviroment';
                     actualMenu = menuType;
-                    this.controls();
                 }
                 if(quitButtonFront.screenButtons()){
                     this.removeFullScreen();
                 }
             }
             this.checkFullScreen();
+            this.controlsType();
         }
     },
     continueMenu: function(){
@@ -271,53 +268,74 @@ const theCanvas = {
             quitButtonFront.builder();
             if(theCanvas.x && theCanvas.y){
                 if(continueButtonFront.screenButtons()){
-                    menuType = 'gameEnviroment';
+                    menuType = 'continueGameEnviroment';
                     actualMenu = menuType;
-                    this.controls();
                 }
                 if(restartButtonFront.screenButtons()){
-                    menuType = 'gameEnviroment';
+                    menuType = 'newGameEnviroment';
                     actualMenu = menuType;
-                    this.controls();
                 }
                 if(quitButtonFront.screenButtons()){
                     this.removeFullScreen();
                 }
             }
             this.checkFullScreen();
+            this.controlsType();
         }
     },
     gameEnviroment: function(){
-        if(menuType == 'gameEnviroment'){
-            var background, character, mainMenuButton;
+        if(menuType == 'newGameEnviroment' || menuType == 'continueGameEnviroment'){
+            var background, mainMenuButton;
             background = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/gameEnviroment.jpg');
             mainMenuButton = new Components('imageButton',2,2,30,30,'Media/Mini-Game/Images/mainMenu.png');
             background.builder();
             mainMenuButton.builder();
-            character = new Components('mainCharacter',(this.width / 2),(this.height - 35),((this.width / 2) - 25),((this.height - 35) + 25));
-            character.builder();
-            character = new Components('mainCharacter',(canvas.width / 2),(this.height - 35),((this.width / 2) + 25),((this.height - 35) + 25));
-            character.builder();
-            character = new Components('mainCharacter',((this.width / 2) - 25),(this.height - 10),((this.width / 2) + 25),(this.height - 10));
-            character.builder();
             if(theCanvas.x && theCanvas.y){
                 if(mainMenuButton.screenButtons()){
                     menuType = 'continueMenu';
                     actualMenu = menuType;
                 }
             }
+            if(menuType == 'newGameEnviroment'){
+                character[0] = new Components('mainCharacter',(this.width / 2),(this.height - 35),((this.width / 2) - 25),((this.height - 35) + 25));
+                character[1] = new Components('mainCharacter',(canvas.width / 2),(this.height - 35),((this.width / 2) + 25),((this.height - 35) + 25));
+                character[2] = new Components('mainCharacter',((this.width / 2) - 25),(this.height - 10),((this.width / 2) + 25),(this.height - 10));
+                character.forEach(i =>{
+                    i.builder();
+                });
+                menuType = 'continueGameEnviroment';
+            }   
+            if(menuType == 'continueGameEnviroment'){
+                if(theCanvas.controlType == 'keyboard'){
+                    var buttonUp, buttonBottom, buttonLeft, buttonRight, buttonRightUp, buttonLeftUp, buttonRightBottom, buttonLeftBottom;
+                    buttonUp = new Components('button',50,(this.height - 100),15,15,'purple','moveUp');
+                    buttonUp.builder();
+                    if(theCanvas.x && theCanvas.y){
+                        if(buttonUp.screenButtons()){
+                            character.forEach(i =>{
+                                i.moveY1 = -1;
+                                i.moveY2 = -1;
+                                i.moveCharacter();
+                            });
+                        }
+                    }
+                }
+                character[0].builder();
+                character[0].y -= 1;
+                character[0].height -= 1;
+            }
         }
     },
+    controlsType: function(){
+        canvas.onmousedown = ()=>{
+            theCanvas.controlType = 'keyboard';
+        }
+        // canvas.ontouchstart = ()=>{
+            // theCanvas.controlType = 'touchscreen';
+        // }
+    },
     controls: function(){
-        canvas.onmousedown = ()=>{theCanvas.controlType = 'keyboard';}
-        canvas.ontouchstart = ()=>{theCanvas.controlType = 'touchscreen';}
-
-        if(theCanvas.controlType && theCanvas.controlType == 'keyboard'){
-            console.log(theCanvas.controlType)
-        }
-        if(theCanvas.controlType && theCanvas.controlType == 'touchscreen'){
-            console.log(theCanvas.controlType)
-        }
+        
     },
     stages: function(){
 
@@ -337,6 +355,10 @@ class Components{
         this.color = color;
         this.image = new Image();
         this.font = fonts;
+        this.moveX1 = 0;
+        this.moveY1 = 0;
+        this.moveX2 = 0;
+        this.moveY2 = 0;
     }
     builder(){
         var ctx = theCanvas.canvasContext;
@@ -379,47 +401,11 @@ class Components{
         }
         return true;
     }
-    move(){
-        if(this.type == 'moveUp'){
-            this.y -= 1;
-            this.height -= 1;
-        }
-        if(this.type == 'moveDiagonalTopRight'){
-            this.y -= 1;
-            this.height -= 1;
-            this.x += 1;
-            this.width += 1;
-        }
-        if(this.type == 'moveRight'){
-            this.x += 1;
-            this.width += 1;
-        }
-        if(this.type == 'moveDiagonalBottomRight'){
-            this.y += 1;
-            this.height += 1;
-            this.x += 1;
-            this.width += 1;
-        }
-        if(this.type == 'moveBottom'){
-            this.y += 1;
-            this.height += 1;
-        }
-        if(this.type == 'moveDiagonalBottomLeft'){
-            this.y += 1;
-            this.height += 1;
-            this.x -= 1;
-            this.width -= 1;
-        }
-        if(this.type == 'moveLeft'){
-            this.x -= 1;
-            this.width -= 1;
-        }
-        if(this.type == 'moveDiagonalTopLeft'){
-            this.y -= 1;
-            this.height -= 1;
-            this.x -= 1;
-            this.width -= 1;
-        }
+    moveCharacter(){
+        this.x += this.moveX1;
+        this.y += this.moveY1;
+        this.width += this.moveX2;
+        this.height += this.moveY2;
     }
     colission(){
 
