@@ -4,9 +4,9 @@ const canvas = document.querySelector('[data-canvas-mini-game]');
 const canvasWarnings = document.querySelector('#chw0');
 const canvasHandler = document.querySelector('#ch0');
 //GENERAL VARIABLES:
-var winWidth, winHeight, canvasW, canvasH, menus, menuType, actualMenu, actualHeight, currentGame;
+var winWidth, winHeight, canvasW, canvasH, menus, menuType, actualMenu, actualHeight, controlType;
 //CHARACTERS VARIABLES:
-var character = [];
+var character;
 //INITIALIZATION:
 body.onload = windowCheck;
 //SCREEN METER:
@@ -64,20 +64,25 @@ function windowCheck(){
                 theCanvas.screenActionsDetector();
                 if(menuType == 'startMenu'){
                     theCanvas.startMenu();
+                    theCanvas.enableTextSelection();
                 }
                 if(menuType == 'mainMenu'){
                     theCanvas.mainMenu();
+                    theCanvas.enableTextSelection();
                 }
                 if(menuType == 'continueMenu'){
                     theCanvas.continueMenu();
+                    theCanvas.enableTextSelection();
                 }
                 if(menuType == 'newGameEnviroment' ||
                 menuType == 'continueGameEnviroment'){
                     theCanvas.gameEnviroment();
+                    theCanvas.disableTextSelection();
                 }
             }else{
                 fonts(14,0);
                 theCanvas.warningMenu();
+                theCanvas.enableTextSelection();
                 setTimeout(()=>{
                     theCanvas.stop();
                 },1);
@@ -106,7 +111,7 @@ function windowCheck(){
 const theCanvas = {
     start: function(){
         this.canvasContext = canvas.getContext('2d');
-        this.interval = setInterval(refreshCanvas,10);
+        this.interval = setInterval(refreshCanvas,20);
     },
     stop: function(){
         clearInterval(this.interval);
@@ -118,6 +123,7 @@ const theCanvas = {
         canvas.ontouchstart = (e)=>{
             theCanvas.x = e.touches[0].pageX;
             theCanvas.y = e.touches[0].pageY;
+            controlType = 'touchscreen';
         }
         canvas.ontouchend = ()=>{
             theCanvas.x = false;
@@ -238,7 +244,6 @@ const theCanvas = {
                 }
             }
             this.checkFullScreen();
-            this.controlsType();
         }
     },
     continueMenu: function(){
@@ -281,7 +286,6 @@ const theCanvas = {
                 }
             }
             this.checkFullScreen();
-            this.controlsType();
         }
     },
     gameEnviroment: function(){
@@ -298,133 +302,124 @@ const theCanvas = {
                 }
             }
             if(menuType == 'newGameEnviroment'){
-                character[0] = new Components('mainCharacter',(this.width / 2),(this.height - 35),((this.width / 2) - 25),((this.height - 35) + 25));
-                character[1] = new Components('mainCharacter',(canvas.width / 2),(this.height - 35),((this.width / 2) + 25),((this.height - 35) + 25));
-                character[2] = new Components('mainCharacter',((this.width / 2) - 25),(this.height - 10),((this.width / 2) + 25),(this.height - 10));
-                character.forEach(i =>{
-                    i.builder();
-                });
+                character = new Components('mainCharacter',(this.width / 2),(this.height - 35),((this.width / 2) - 25),(this.height - 10),
+                'red',null,(canvas.width / 2 + 25),(this.height - 10));
+                character.builder();
                 menuType = 'continueGameEnviroment';
                 actualMenu = menuType;
             }   
             if(menuType == 'continueGameEnviroment'){
-                if(theCanvas.controlType == 'keyboard'){
+                if(controlType == 'touchscreen'){
                     var buttonUp,buttonBottom,buttonLeft,buttonRight,buttonRightUp,buttonLeftUp,buttonRightBottom,buttonLeftBottom;
-                    buttonUp = new Components('button',50,(this.height - 90),15,15,'blue','moveUp');
+                    buttonUp = new Components('button',50,(this.height - 90),30,30,'blue','moveUp');
                     buttonUp.builder();
-                    buttonBottom = new Components('button',50,(this.height - 25 - 5),15,15,'blue','moveUp');
+                    buttonBottom = new Components('button',50,(this.height - 25 - 5),30,30,'blue','moveUp');
                     buttonBottom.builder();
-                    buttonLeft = new Components('button',20,(this.height - 60),15,15,'blue','moveUp');
+                    buttonLeft = new Components('button',20,(this.height - 60),30,30,'blue','moveUp');
                     buttonLeft.builder();
-                    buttonRight = new Components('button',80,(this.height - 60),15,15,'blue','moveUp');
+                    buttonRight = new Components('button',80,(this.height - 60),30,30,'blue','moveUp');
                     buttonRight.builder();
-                    buttonRightUp = new Components('button',70,(this.height - 80),15,15,'green','moveUp');
+                    buttonRightUp = new Components('button',85,(this.height - 85),20,20,'green','moveUp');
                     buttonRightUp.builder();
-                    buttonLeftUp = new Components('button',30,(this.height - 80),15,15,'green','moveUp');
+                    buttonLeftUp = new Components('button',25,(this.height - 85),20,20,'green','moveUp');
                     buttonLeftUp.builder();
-                    buttonRightBottom = new Components('button',70,(this.height - 40),15,15,'green','moveUp');
+                    buttonRightBottom = new Components('button',85,(this.height - 25),20,20,'green','moveUp');
                     buttonRightBottom.builder();
-                    buttonLeftBottom = new Components('button',30,(this.height - 40),15,15,'green','moveUp');
+                    buttonLeftBottom = new Components('button',25,(this.height - 25),20,20,'green','moveUp');
                     buttonLeftBottom.builder();
                     if(theCanvas.x && theCanvas.y){
                         if(buttonUp.screenButtons()){
-                            character.forEach(i =>{
-                                i.moveY1 = -1;
-                                i.moveY2 = -1;
-                                i.moveCharacter();
-                            });
+                            character.moveY1 = -1;
+                            character.moveY2 = -1;
+                            character.moveY3 = -1;
+                            character.moveCharacter();
                         }
                         if(buttonBottom.screenButtons()){
-                            character.forEach(i =>{
-                                i.moveY1 = 1;
-                                i.moveY2 = 1;
-                                i.moveCharacter();
-                            });
+                            character.moveY1 = 1;
+                            character.moveY2 = 1;
+                            character.moveY3 = 1;
+                            character.moveCharacter();
                         }
                         if(buttonLeft.screenButtons()){
-                            character.forEach(i =>{
-                                i.moveX1 = -1;
-                                i.moveX2 = -1;
-                                i.moveCharacter();
-                            });
+                            character.moveX1 = -1;
+                            character.moveX2 = -1;
+                            character.moveX3 = -1;
+                            character.moveCharacter();
                         }
                         if(buttonRight.screenButtons()){
-                            character.forEach(i =>{
-                                i.moveX1 = 1;
-                                i.moveX2 = 1;
-                                i.moveCharacter();
-                            });
+                            character.moveX1 = 1;
+                            character.moveX2 = 1;
+                            character.moveX3 = 1;
+                            character.moveCharacter();
                         }
                         if(buttonRightUp.screenButtons()){
-                            character.forEach(i =>{
-                                i.moveY1 = -1;
-                                i.moveY2 = -1;
-                                i.moveX1 = 1;
-                                i.moveX2 = 1;
-                                i.moveCharacter();
-                            });
+                            character.moveY1 = -1;
+                            character.moveY2 = -1;
+                            character.moveY3 = -1;
+                            character.moveX1 = 1;
+                            character.moveX2 = 1;
+                            character.moveX3 = 1;
+                            character.moveCharacter();
                         }
                         if(buttonLeftUp.screenButtons()){
-                            character.forEach(i =>{
-                                i.moveY1 = -1;
-                                i.moveY2 = -1;
-                                i.moveX1 = -1;
-                                i.moveX2 = -1;
-                                i.moveCharacter();
-                            });
+                            character.moveY1 = -1;
+                            character.moveY2 = -1;
+                            character.moveY3 = -1;
+                            character.moveX1 = -1;
+                            character.moveX2 = -1;
+                            character.moveX3 = -1;
+                            character.moveCharacter();
                         }
                         if(buttonRightBottom.screenButtons()){
-                            character.forEach(i =>{
-                                i.moveY1 = 1;
-                                i.moveY2 = 1;
-                                i.moveX1 = 1;
-                                i.moveX2 = 1;
-                                i.moveCharacter();
-                            });
+                            character.moveY1 = 1;
+                            character.moveY2 = 1;
+                            character.moveY3 = 1;
+                            character.moveX1 = 1;
+                            character.moveX2 = 1;
+                            character.moveX3 = 1;
+                            character.moveCharacter();
                         }
                         if(buttonLeftBottom.screenButtons()){
-                            character.forEach(i =>{
-                                i.moveY1 = 1;
-                                i.moveY2 = 1;
-                                i.moveX1 = -1;
-                                i.moveX2 = -1;
-                                i.moveCharacter();
-                            });
+                            character.moveY1 = 1;
+                            character.moveY2 = 1;
+                            character.moveY3 = 1;
+                            character.moveX1 = -1;
+                            character.moveX2 = -1;
+                            character.moveX3 = -1;
+                            character.moveCharacter();
                         }
                     }else{
-                        character.forEach(i =>{
-                            i.moveY1 = 0;
-                            i.moveY2 = 0;
-                            i.moveX1 = 0;
-                            i.moveX2 = 0;
-                        });
+                        character.moveY1 = 0;
+                        character.moveY2 = 0;
+                        character.moveY3 = 0;
+                        character.moveX1 = 0;
+                        character.moveX2 = 0;
+                        character.moveX3 = 0;
                     }
+                }else{
+                    
                 }
-                character.forEach(i =>{
-                    i.builder();
-                    i.wallColission();
-                });
+                character.builder();
+                character.wallColission();
             }
         }
-    },
-    controlsType: function(){
-        canvas.onmousedown = ()=>{
-            theCanvas.controlType = 'keyboard';
-        }
-        // canvas.ontouchstart = ()=>{
-            // theCanvas.controlType = 'touchscreen';
-        // }
     },
     stages: function(){
 
     },
     sounds: function(){
 
+    },
+    disableTextSelection: function(){
+        canvas.style.userSelect = 'none';
+    },
+    enableTextSelection: function(){
+        canvas.style.userSelect = 'auto';
     }
 }
 //COMPONENTS CONSTRUCTOR:
 class Components{
-    constructor(type,x,y,width,height,color,fonts){
+    constructor(type,x,y,width,height,color,fonts,width2,height2){
         this.type = type;
         this.x = x;
         this.y = y;
@@ -433,10 +428,14 @@ class Components{
         this.color = color;
         this.image = new Image();
         this.font = fonts;
+        this.width2 = width2;
+        this.height2 = height2;
         this.moveX1 = 0;
         this.moveY1 = 0;
         this.moveX2 = 0;
         this.moveY2 = 0;
+        this.moveX3 = 0;
+        this.moveY3 = 0;
     }
     builder(){
         this.ctx = theCanvas.canvasContext;
@@ -458,8 +457,12 @@ class Components{
             this.ctx.beginPath();
             this.ctx.moveTo(this.x,this.y);
             this.ctx.lineTo(this.width,this.height);
-            this.ctx.strokeStyle = 'red';
+            this.ctx.lineTo(this.width2,this.height2);
+            this.ctx.closePath();
+            this.ctx.strokeStyle = this.color;
+            this.ctx.fillStyle = this.color;
             this.ctx.stroke();
+            this.ctx.fill();
         }
     }
     screenButtons(){
@@ -485,36 +488,34 @@ class Components{
         this.y += this.moveY1;
         this.width += this.moveX2;
         this.height += this.moveY2;
+        this.width2 += this.moveX3;
+        this.height2 += this.moveY3;
     }
     wallColission(){
         if(this.type == 'mainCharacter'){
-            if(character[0].width == 0){
-                character.forEach(i=>{
-                    i.moveX1 = 1;
-                    i.moveX2 = 1;
-                    i.moveCharacter();
-                })
+            if(character.width == 0){
+                character.moveX1 = 1;
+                character.moveX2 = 1;
+                character.moveX3 = 1;
+                character.moveCharacter();
             }
-            if(character[0].x == canvas.width || character[1].width == canvas.width){
-                character.forEach(i=>{
-                    i.moveX1 = -1;
-                    i.moveX2 = -1;
-                    i.moveCharacter();
-                })
+            if(character.width == canvas.width){
+                character.moveX1 = -1;
+                character.moveX2 = -1;
+                character.moveX3 = -1;
+                character.moveCharacter();
             }
-            if(character[0].y == 1){
-                character.forEach(i=>{
-                    i.moveY1 = 1;
-                    i.moveY2 = 1;
-                    i.moveCharacter();
-                })
+            if(character.y == 0){
+                character.moveY1 = 1;
+                character.moveY2 = 1;
+                character.moveY3 = 1;
+                character.moveCharacter();
             }
-            if(character[2].y == canvas.height - 1){
-                character.forEach(i=>{
-                    i.moveY1 = -1;
-                    i.moveY2 = -1;
-                    i.moveCharacter();
-                })
+            if(character.height2 == canvas.height){
+                character.moveY1 = -1;
+                character.moveY2 = -1;
+                character.moveY3 = -1;
+                character.moveCharacter();
             }
         }
     }
