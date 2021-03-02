@@ -99,7 +99,7 @@
                 },
                 warningMenuA: function(){
                     this.ctx.fillStyle = 'black';
-                    this.ctx.fillRect(0,0,this.w,150);
+                    this.ctx.fillRect(0,0,this.w,200);
 
                     this.ctx.font = `${this.f}px Arial`;
                     this.ctx.fillStyle = 'white';
@@ -127,17 +127,14 @@
                     this.ctx.font = `${this.f}px Calibri`;
                     this.ctx.strokeText('Using "moveTo", "lineTo" and "stroke()":',10,420);
 
+                    this.ctx.beginPath();
                     this.ctx.moveTo((canvasWA / 2),470);
                     this.ctx.lineTo((canvasWA / 2 - 100),640);
-                    this.ctx.stroke();
-
-                    this.ctx.moveTo((canvasWA / 2),470);
                     this.ctx.lineTo((canvasWA / 2 + 100),640);
+                    this.ctx.closePath();
+                    this.ctx.fillStyle = 'red';
                     this.ctx.stroke();
-
-                    this.ctx.moveTo((canvasWA / 2 + 100),640);
-                    this.ctx.lineTo((canvasWA / 2 - 100),640);
-                    this.ctx.stroke();
+                    this.ctx.fill();
 
                     //DRAWING CIRCLES:
                     this.ctx.font = `${this.f}px Calibri`;
