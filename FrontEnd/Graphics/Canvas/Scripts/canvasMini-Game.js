@@ -310,97 +310,139 @@ const theCanvas = {
             }   
             if(menuType == 'continueGameEnviroment'){
                 if(controlType == 'touchscreen'){
-                    var buttonUp,buttonBottom,buttonLeft,buttonRight,buttonRightUp,buttonLeftUp,buttonRightBottom,buttonLeftBottom;
-                    buttonUp = new Components('button',50,(this.height - 90),30,30,'blue','moveUp');
-                    buttonUp.builder();
-                    buttonBottom = new Components('button',50,(this.height - 25 - 5),30,30,'blue','moveUp');
-                    buttonBottom.builder();
-                    buttonLeft = new Components('button',20,(this.height - 60),30,30,'blue','moveUp');
-                    buttonLeft.builder();
-                    buttonRight = new Components('button',80,(this.height - 60),30,30,'blue','moveUp');
-                    buttonRight.builder();
-                    buttonRightUp = new Components('button',85,(this.height - 85),20,20,'green','moveUp');
-                    buttonRightUp.builder();
-                    buttonLeftUp = new Components('button',25,(this.height - 85),20,20,'green','moveUp');
-                    buttonLeftUp.builder();
-                    buttonRightBottom = new Components('button',85,(this.height - 25),20,20,'green','moveUp');
-                    buttonRightBottom.builder();
-                    buttonLeftBottom = new Components('button',25,(this.height - 25),20,20,'green','moveUp');
-                    buttonLeftBottom.builder();
-                    if(theCanvas.x && theCanvas.y){
-                        if(buttonUp.screenButtons()){
-                            character.moveY1 = -1;
-                            character.moveY2 = -1;
-                            character.moveY3 = -1;
-                            character.moveCharacter();
-                        }
-                        if(buttonBottom.screenButtons()){
-                            character.moveY1 = 1;
-                            character.moveY2 = 1;
-                            character.moveY3 = 1;
-                            character.moveCharacter();
-                        }
-                        if(buttonLeft.screenButtons()){
-                            character.moveX1 = -1;
-                            character.moveX2 = -1;
-                            character.moveX3 = -1;
-                            character.moveCharacter();
-                        }
-                        if(buttonRight.screenButtons()){
-                            character.moveX1 = 1;
-                            character.moveX2 = 1;
-                            character.moveX3 = 1;
-                            character.moveCharacter();
-                        }
-                        if(buttonRightUp.screenButtons()){
-                            character.moveY1 = -1;
-                            character.moveY2 = -1;
-                            character.moveY3 = -1;
-                            character.moveX1 = 1;
-                            character.moveX2 = 1;
-                            character.moveX3 = 1;
-                            character.moveCharacter();
-                        }
-                        if(buttonLeftUp.screenButtons()){
-                            character.moveY1 = -1;
-                            character.moveY2 = -1;
-                            character.moveY3 = -1;
-                            character.moveX1 = -1;
-                            character.moveX2 = -1;
-                            character.moveX3 = -1;
-                            character.moveCharacter();
-                        }
-                        if(buttonRightBottom.screenButtons()){
-                            character.moveY1 = 1;
-                            character.moveY2 = 1;
-                            character.moveY3 = 1;
-                            character.moveX1 = 1;
-                            character.moveX2 = 1;
-                            character.moveX3 = 1;
-                            character.moveCharacter();
-                        }
-                        if(buttonLeftBottom.screenButtons()){
-                            character.moveY1 = 1;
-                            character.moveY2 = 1;
-                            character.moveY3 = 1;
-                            character.moveX1 = -1;
-                            character.moveX2 = -1;
-                            character.moveX3 = -1;
-                            character.moveCharacter();
-                        }
-                    }else{
-                        character.moveY1 = 0;
-                        character.moveY2 = 0;
-                        character.moveY3 = 0;
-                        character.moveX1 = 0;
-                        character.moveX2 = 0;
-                        character.moveX3 = 0;
-                    }
-                }else{
-                    
+                    this.buttonUp,this.buttonBottom,this.buttonLeft,this.buttonRight,this.buttonRightUp,
+                    this.buttonLeftUp,this.buttonRightBottom,this.buttonLeftBottom;
+                    this.buttonUp = new Components('button',50,(this.height - 90),30,30,'blue','moveUp');
+                    this.buttonUp.builder();
+                    this.buttonBottom = new Components('button',50,(this.height - 25 - 5),30,30,'blue','moveUp');
+                    this.buttonBottom.builder();
+                    this.buttonLeft = new Components('button',20,(this.height - 60),30,30,'blue','moveUp');
+                    this.buttonLeft.builder();
+                    this.buttonRight = new Components('button',80,(this.height - 60),30,30,'blue','moveUp');
+                    this.buttonRight.builder();
+                    this.buttonRightUp = new Components('button',85,(this.height - 85),20,20,'green','moveUp');
+                    this.buttonRightUp.builder();
+                    this.buttonLeftUp = new Components('button',25,(this.height - 85),20,20,'green','moveUp');
+                    this.buttonLeftUp.builder();
+                    this.buttonRightBottom = new Components('button',85,(this.height - 25),20,20,'green','moveUp');
+                    this.buttonRightBottom.builder();
+                    this.buttonLeftBottom = new Components('button',25,(this.height - 25),20,20,'green','moveUp');
+                    this.buttonLeftBottom.builder(); 
                 }
+                this.controls();
                 character.builder();
                 character.wallColission();
+            }
+        }
+    },
+    controls: function(){
+        if(controlType == 'touchscreen'){
+            if(theCanvas.x && theCanvas.y){
+                if(this.buttonUp.screenButtons()){
+                    character.moveY1 = -1;
+                    character.moveY2 = -1;
+                    character.moveY3 = -1;
+                    character.moveCharacter();
+                }
+                if(this.buttonBottom.screenButtons()){
+                    character.moveY1 = 1;
+                    character.moveY2 = 1;
+                    character.moveY3 = 1;
+                    character.moveCharacter();
+                }
+                if(this.buttonLeft.screenButtons()){
+                    character.moveX1 = -1;
+                    character.moveX2 = -1;
+                    character.moveX3 = -1;
+                    character.moveCharacter();
+                }
+                if(this.buttonRight.screenButtons()){
+                    character.moveX1 = 1;
+                    character.moveX2 = 1;
+                    character.moveX3 = 1;
+                    character.moveCharacter();
+                }
+                if(this.buttonRightUp.screenButtons()){
+                    character.moveY1 = -1;
+                    character.moveY2 = -1;
+                    character.moveY3 = -1;
+                    character.moveX1 = 1;
+                    character.moveX2 = 1;
+                    character.moveX3 = 1;
+                    character.moveCharacter();
+                }
+                if(this.buttonLeftUp.screenButtons()){
+                    character.moveY1 = -1;
+                    character.moveY2 = -1;
+                    character.moveY3 = -1;
+                    character.moveX1 = -1;
+                    character.moveX2 = -1;
+                    character.moveX3 = -1;
+                    character.moveCharacter();
+                }
+                if(this.buttonRightBottom.screenButtons()){
+                    character.moveY1 = 1;
+                    character.moveY2 = 1;
+                    character.moveY3 = 1;
+                    character.moveX1 = 1;
+                    character.moveX2 = 1;
+                    character.moveX3 = 1;
+                    character.moveCharacter();
+                }
+                if(this.buttonLeftBottom.screenButtons()){
+                    character.moveY1 = 1;
+                    character.moveY2 = 1;
+                    character.moveY3 = 1;
+                    character.moveX1 = -1;
+                    character.moveX2 = -1;
+                    character.moveX3 = -1;
+                    character.moveCharacter();
+                }
+            }else{
+                character.moveY1 = 0;
+                character.moveY2 = 0;
+                character.moveY3 = 0;
+                character.moveX1 = 0;
+                character.moveX2 = 0;
+                character.moveX3 = 0;
+            }
+        }else{
+            window.addEventListener('keydown', ek=>{
+                theCanvas.key = (theCanvas.key || []);
+                theCanvas.key[ek.keyCode] = (ek.type == 'keydown');
+            })
+            window.addEventListener('keyup', ek=>{
+                theCanvas.key[ek.keyCode] = (ek.type == 'keydown');
+                character.moveY1 = 0;
+                character.moveY2 = 0;
+                character.moveY3 = 0;
+                character.moveX1 = 0;
+                character.moveX2 = 0;
+                character.moveX3 = 0;
+            })
+            if(theCanvas.key && theCanvas.key[37] || theCanvas.key && theCanvas.key[65]){
+                character.moveX1 = -1;
+                character.moveX2 = -1;
+                character.moveX3 = -1;
+                character.moveCharacter();
+            }
+            if(theCanvas.key && theCanvas.key[39] || theCanvas.key && theCanvas.key[68]){
+                character.moveX1 = 1;
+                character.moveX2 = 1;
+                character.moveX3 = 1;
+                character.moveCharacter();
+            }
+            if(theCanvas.key && theCanvas.key[38] || theCanvas.key && theCanvas.key[87]){
+                character.moveY1 = -1;
+                character.moveY2 = -1;
+                character.moveY3 = -1;
+                character.moveCharacter();
+            }
+            if(theCanvas.key && theCanvas.key[40] || theCanvas.key && theCanvas.key[83]){
+                character.moveY1 = 1;
+                character.moveY2 = 1;
+                character.moveY3 = 1;
+                character.moveCharacter();
             }
         }
     },
