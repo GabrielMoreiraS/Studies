@@ -6,22 +6,26 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <link rel="stylesheet" type="text/css" href="../../../style.css"/>
-        <link rel="stylesheet" type="text/css" href="Styles/Mini-Game.css"/>
+        <style>
+            .game-link{
+                width: 100%;
+                max-width: 70px;
+                height: 45px;
+                display: inline-block;
+                padding-top: 14px; 
+                text-decoration: none;
+                text-align: center;
+                background-color: rgb(94, 103, 119);
+                color: white;
+                border-radius: 15px;
+            }
+        </style>
     </head>
     <body>
         <div class="container">
             <div class="header">
                 <a href="../Graphics.html">Go back</a>
                 <h1 class="title">Canvas</h1>
-            </div>
-            <div class="topic">
-                <h2 class="title-box">Mini-Game</h2>
-                <div class="box">
-                    <div id='ch0' class="canvas-handler">
-                        <p id='chw0' class="canvas-handler-warnings"></p>
-                        <canvas data-canvas-mini-game></canvas>
-                    </div>
-                </div>
             </div>
             <div class="topic">
                 <h2 class="title-box">Possibilities</h2>
@@ -32,8 +36,13 @@
                     </div>
                 </div>
             </div>
+            <div class="topic">
+                <h2 class="title-box">Mini-Game</h2>
+                <div class="box">
+                    <a class='game-link' href='Mini-Game.html'>Go!</a>
+                </div>
+            </div>
         </div>
-        <script src="Scripts/canvasMini-Game.js"></script>
         <script>
             //ALL REFERENCES:
             const canvasAll = document.querySelector('[data-canvas]');

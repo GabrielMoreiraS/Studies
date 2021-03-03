@@ -19,15 +19,17 @@ function windowCheck(){
             menuType = 'startMenu';
         }else{
             menuType = actualMenu;
-            if(menuType != 'startMenu' && menuType != 'newGameEnviroment' || menuType != 'startMenu' && menuType != 'continueGameEnviroment'){
+            if(menuType != 'startMenu' && menuType != 'newGameEnviroment' ||
+            menuType != 'startMenu' && menuType != 'continueGameEnviroment'){
                 setTimeout(()=>{
                     canvas.requestFullscreen();
                     setTimeout(()=>{
                         theCanvas.fullScreenCanvas();
-                    },100)
-                },500)
+                    },100);
+                },500);
             }
-            if(menuType != 'startMenu' && menuType == 'newGameEnviroment' || menuType != 'startMenu' && menuType == 'continueGameEnviroment'){
+            if(menuType != 'startMenu' && menuType == 'newGameEnviroment' ||
+            menuType != 'startMenu' && menuType == 'continueGameEnviroment'){
                 setTimeout(()=>{
                     canvas.requestFullscreen();
                     setTimeout(()=>{
@@ -35,10 +37,9 @@ function windowCheck(){
                         setTimeout(()=>{
                             menuType = 'continueMenu';
                             actualMenu = menuType;
-                        },100)
-                        
-                    },100)
-                },500)
+                        },100);
+                    },100);
+                },500);
             }
         };
         if(winWidth > 850){
@@ -111,7 +112,7 @@ function windowCheck(){
 const theCanvas = {
     start: function(){
         this.canvasContext = canvas.getContext('2d');
-        this.interval = setInterval(refreshCanvas,20);
+        this.interval = setInterval(refreshCanvas,1);
     },
     stop: function(){
         clearInterval(this.interval);
@@ -296,11 +297,11 @@ const theCanvas = {
             background.builder();
             mainMenuButton.builder();
             if(theCanvas.x && theCanvas.y){
-                if(mainMenuButton.screenButtons()){
-                    menuType = 'continueMenu';
-                    actualMenu = menuType;
+               if(mainMenuButton.screenButtons()){
+                   menuType = 'continueMenu';
+                   actualMenu = menuType;
                 }
-            }
+            };
             if(menuType == 'newGameEnviroment'){
                 character = new Components('mainCharacter',(this.width / 2),(this.height - 35),((this.width / 2) - 25),(this.height - 10),
                 'red',null,(canvas.width / 2 + 25),(this.height - 10));
@@ -310,8 +311,6 @@ const theCanvas = {
             }   
             if(menuType == 'continueGameEnviroment'){
                 if(controlType == 'touchscreen'){
-                    this.buttonUp,this.buttonBottom,this.buttonLeft,this.buttonRight,this.buttonRightUp,
-                    this.buttonLeftUp,this.buttonRightBottom,this.buttonLeftBottom;
                     this.buttonUp = new Components('button',50,(this.height - 90),30,30,'blue','moveUp');
                     this.buttonUp.builder();
                     this.buttonBottom = new Components('button',50,(this.height - 25 - 5),30,30,'blue','moveUp');
@@ -445,12 +444,6 @@ const theCanvas = {
                 character.moveCharacter();
             }
         }
-    },
-    stages: function(){
-
-    },
-    sounds: function(){
-
     },
     disableTextSelection: function(){
         canvas.style.userSelect = 'none';
