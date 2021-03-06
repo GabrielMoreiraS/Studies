@@ -41,7 +41,7 @@ function windowCheck(){
                     },100);
                 },500);
             }
-        };
+        }
         if(winWidth > 850){
             canvasW = 700;
             canvasH = 500;
@@ -84,9 +84,7 @@ function windowCheck(){
                 fonts(14,0);
                 theCanvas.warningMenu();
                 theCanvas.enableTextSelection();
-                setTimeout(()=>{
-                    theCanvas.stop();
-                },1);
+                theCanvas.stop();
             }
         }
     }else{
@@ -119,7 +117,7 @@ const theCanvas = {
     imageButton: [],
     start: function(){
         this.canvasContext = canvas.getContext('2d');
-        this.interval = setInterval(refreshCanvas,20);
+        this.interval = setInterval(refreshCanvas,1);
         this.materials();
     },
     stop: function(){
@@ -317,11 +315,11 @@ const theCanvas = {
             this.background[4].builder();
             this.imageButton[0].builder();
             if(theCanvas.x && theCanvas.y){
-               if(this.imageButton[0].screenButtons()){
-                   menuType = 'continueMenu';
-                   actualMenu = menuType;
+                if(this.imageButton[0].screenButtons()){
+                    menuType = 'continueMenu';
+                    actualMenu = menuType;
                 }
-            };
+            }
             if(menuType == 'newGameEnviroment'){
                 character = new Components('mainCharacter',(this.width / 2),(this.height - 35),((this.width / 2) - 25),(this.height - 10),
                 'red',null,(canvas.width / 2 + 25),(this.height - 10));
