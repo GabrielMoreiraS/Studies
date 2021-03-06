@@ -45,18 +45,18 @@ function windowCheck(){
         if(winWidth > 850){
             canvasW = 700;
             canvasH = 500;
-            theCanvas.createCanvas(canvasW,canvasH);
             fonts(70,14);
+            theCanvas.createCanvas(canvasW,canvasH);
         }else if(winWidth >= 600 && winWidth < 850){
             canvasW = (canvasHandler.clientWidth - 60);
             canvasH = (canvasW - 160);
-            theCanvas.createCanvas(canvasW,canvasH);
             fonts(60,13);
+            theCanvas.createCanvas(canvasW,canvasH);
         }else if(winWidth >= 300 && winWidth < 600){
             canvasW = (canvasHandler.clientWidth - 60);
             canvasH = (canvasW - 100);
-            theCanvas.createCanvas(canvasW,canvasH);
             fonts(60,12);
+            theCanvas.createCanvas(canvasW,canvasH);
         }else if(winWidth >= 600 && winWidth < 300){
             warningCanvasHandler();
         }
@@ -110,34 +110,23 @@ function windowCheck(){
 }
 //CANVAS PROPERTIES:
 const theCanvas = {
+    background: [],
+    mainTitle: [],
+    button: [],
+    buttonBack: [],
+    buttonText: [],
+    buttonFront: [],
+    imageButton: [],
     start: function(){
         this.canvasContext = canvas.getContext('2d');
-        this.interval = setInterval(refreshCanvas,1);
+        this.interval = setInterval(refreshCanvas,20);
+        this.materials();
     },
     stop: function(){
         clearInterval(this.interval);
     },
     clearCanvas: function(){
         this.canvasContext.clearRect(0,0,this.width,this.height);
-    },
-    screenActionsDetector: function(){
-        canvas.ontouchstart = (e)=>{
-            theCanvas.x = e.touches[0].pageX;
-            theCanvas.y = e.touches[0].pageY;
-            controlType = 'touchscreen';
-        }
-        canvas.ontouchend = ()=>{
-            theCanvas.x = false;
-            theCanvas.y = false;
-        }
-        canvas.addEventListener('mousedown', (e)=>{
-            theCanvas.x = e.pageX;
-            theCanvas.y = e.pageY;
-        })
-        canvas.addEventListener('mouseup', ()=>{
-            theCanvas.x = false;
-            theCanvas.y = false;
-        })
     },
     createCanvas: function(w,h){
         this.width = w;
@@ -159,6 +148,8 @@ const theCanvas = {
         this.height = screen.height;
         canvas.width = this.width;
         canvas.height = this.height;
+        this.stop();
+        this.start();
     },
     removeFullScreen: function(){
         this.stop();
@@ -182,28 +173,82 @@ const theCanvas = {
             }
         }
     },
+    materials: function(){
+        //warningMenu:
+        this.background[0] = new Components('backgroundColor',0,0,this.width,this.height,'black');
+        this.mainTitle[0] = new Components('text',(this.width / 2),50,theCanvas.fontTitle,'white','Turn your device sideways, please.','Arial');
+        //startMenu:
+        this.background[1] = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/startMenu.jpg');
+        this.mainTitle[1] = new Components('text',(this.width / 2),50,theCanvas.fontTitle,'rgb(120, 205, 245)','Start The Game','Calibri');
+        this.buttonBack[1] = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)');
+        this.buttonText[1] = new Components('text',(this.width / 2),(this.height / 2),theCanvas.fontButton,'rgb(120, 205, 245)','Next','Calibri');
+        this.buttonFront[1] = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(0,0,0,0)','buttonFront');
+        //mainMenu:
+        this.background[2] = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/startMenu.jpg');
+        this.mainTitle[2] = new Components('text',(this.width / 2),50,theCanvas.fontTitle,'rgb(120, 205, 245)','Main Menu','Calibri');
+        this.buttonBack[2] = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)');
+        this.buttonText[2] = new Components('text',(this.width / 2),(this.height / 2),theCanvas.fontButton,'rgb(120, 205, 245)','Start','Calibri');
+        this.buttonFront[2] = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(0,0,0,0)');
+        this.buttonBack[3] = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(10, 78, 204,0.5)');
+        this.buttonText[3] = new Components('text',(this.width / 2),(this.height / 2 + 40),theCanvas.fontButton,'rgb(120, 205, 245)','Quit','Calibri');
+        this.buttonFront[3] = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(0,0,0,0)');
+        //continueMenu:
+        this.background[3] = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/startMenu.jpg');
+        this.mainTitle[3] = new Components('text',(this.width / 2),50,theCanvas.fontTitle,'rgb(120, 205, 245)','Main Menu','Calibri');
+        this.buttonBack[4] = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)');
+        this.buttonText[4] = new Components('text',(this.width / 2),(this.height / 2),theCanvas.fontButton,'rgb(120, 205, 245)','Continue','Calibri');
+        this.buttonFront[4] = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(0,0,0,0)');
+        this.buttonBack[5] = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(10, 78, 204,0.5)');
+        this.buttonText[5] = new Components('text',(this.width / 2),(this.height / 2 + 40),theCanvas.fontButton,'rgb(120, 205, 245)','Restart','Calibri');
+        this.buttonFront[5] = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(0,0,0,0)');
+        this.buttonBack[6] = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 60),60,30,'rgba(10, 78, 204,0.5)');
+        this.buttonText[6] = new Components('text',(this.width / 2),(this.height / 2 + 80),theCanvas.fontButton,'rgb(120, 205, 245)','Quit','Calibri');
+        this.buttonFront[6] = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 60),60,30,'rgba(0,0,0,0)');
+        //gameEnviroment - background:
+        this.background[4] = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/gameEnviroment.jpg');
+        this.imageButton[0] = new Components('imageButton',2,2,30,30,'Media/Mini-Game/Images/mainMenu.png');
+        //gameEnviroment - controls buttons:
+        this.button[0] = new Components('button',50,(this.height - 90),30,30,'blue','moveUp');
+        this.button[1] = new Components('button',50,(this.height - 25 - 5),30,30,'blue','moveUp');
+        this.button[2] = new Components('button',20,(this.height - 60),30,30,'blue','moveUp');
+        this.button[3] = new Components('button',80,(this.height - 60),30,30,'blue','moveUp');
+        this.button[4] = new Components('button',85,(this.height - 85),20,20,'green','moveUp');
+        this.button[5] = new Components('button',25,(this.height - 85),20,20,'green','moveUp');
+        this.button[6] = new Components('button',85,(this.height - 25),20,20,'green','moveUp');
+        this.button[7] = new Components('button',25,(this.height - 25),20,20,'green','moveUp');
+    },
+    screenActionsDetector: function(){
+        canvas.ontouchstart = (e)=>{
+            theCanvas.x = e.touches[0].pageX;
+            theCanvas.y = e.touches[0].pageY;
+            controlType = 'touchscreen';
+        }
+        canvas.ontouchend = ()=>{
+            theCanvas.x = false;
+            theCanvas.y = false;
+        }
+        canvas.addEventListener('mousedown', (e)=>{
+            theCanvas.x = e.pageX;
+            theCanvas.y = e.pageY;
+        })
+        canvas.addEventListener('mouseup', ()=>{
+            theCanvas.x = false;
+            theCanvas.y = false;
+        })
+    },
     warningMenu: function(){
-        var background, mainTitle;
-        background = new Components('backgroundColor',0,0,this.width,this.height,'black');
-        mainTitle = new Components('text',(this.width / 2),50,theCanvas.fontTitle,'white','Turn your device sideways, please.','Arial');
-        background.builder();
-        mainTitle.builder();
+        this.background[0].builder();
+        this.mainTitle[0].builder();
     },
     startMenu: function(){
         if(menuType == 'startMenu'){
-            var background, mainTitle, buttonBack, buttonText, buttonFront;
-            background = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/startMenu.jpg');
-            mainTitle = new Components('text',(this.width / 2),50,theCanvas.fontTitle,'rgb(120, 205, 245)','Start The Game','Calibri');
-            buttonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)');
-            buttonText = new Components('text',(this.width / 2),(this.height / 2),theCanvas.fontButton,'rgb(120, 205, 245)','Next','Calibri');
-            buttonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(0,0,0,0)','buttonFront');
-            background.builder();
-            mainTitle.builder();
-            buttonBack.builder();
-            buttonText.builder();
-            buttonFront.builder();
+            this.background[1].builder();
+            this.mainTitle[1].builder();
+            this.buttonBack[1].builder();
+            this.buttonText[1].builder();
+            this.buttonFront[1].builder();
             if(theCanvas.x && theCanvas.y){
-                if(buttonFront.screenButtons()){
+                if(this.buttonFront[1].screenButtons()){
                     setTimeout(()=>{
                         canvas.requestFullscreen();
                         setTimeout(()=>{
@@ -218,29 +263,20 @@ const theCanvas = {
     },
     mainMenu: function(){
         if(menuType == 'mainMenu'){
-            var background, mainTitle, startButtonBack, startText, startButtonFront, quitButtonBack, quitText, quitButtonFront;
-            background = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/startMenu.jpg');
-            mainTitle = new Components('text',(this.width / 2),50,theCanvas.fontTitle,'rgb(120, 205, 245)','Main Menu','Calibri');
-            startButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)');
-            startText = new Components('text',(this.width / 2),(this.height / 2),theCanvas.fontButton,'rgb(120, 205, 245)','Start','Calibri');
-            startButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(0,0,0,0)');
-            quitButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(10, 78, 204,0.5)');
-            quitText = new Components('text',(this.width / 2),(this.height / 2 + 40),theCanvas.fontButton,'rgb(120, 205, 245)','Quit','Calibri');
-            quitButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(0,0,0,0)');
-            background.builder();
-            mainTitle.builder();
-            startButtonBack.builder();
-            startText.builder();
-            startButtonFront.builder();
-            quitButtonBack.builder();
-            quitText.builder();
-            quitButtonFront.builder();
+            this.background[2].builder();
+            this.mainTitle[2].builder();
+            this.buttonBack[2].builder();
+            this.buttonText[2].builder();
+            this.buttonFront[2].builder();
+            this.buttonBack[3].builder();
+            this.buttonText[3].builder();
+            this.buttonFront[3].builder();
             if(theCanvas.x && theCanvas.y){
-                if(startButtonFront.screenButtons()){
+                if(this.buttonFront[2].screenButtons()){
                     menuType = 'newGameEnviroment';
                     actualMenu = menuType;
                 }
-                if(quitButtonFront.screenButtons()){
+                if(this.buttonFront[3].screenButtons()){
                     this.removeFullScreen();
                 }
             }
@@ -249,40 +285,27 @@ const theCanvas = {
     },
     continueMenu: function(){
         if(menuType == 'continueMenu'){
-            var background, mainTitle, continueButtonBack, continueText, continueButtonFront, restartButtonBack, restartText,
-            restartButtonFront, quitButtonBack, quitText, quitButtonFront;
-            background = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/startMenu.jpg');
-            mainTitle = new Components('text',(this.width / 2),50,theCanvas.fontTitle,'rgb(120, 205, 245)','Main Menu','Calibri');
-            continueButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(10, 78, 204,0.5)');
-            continueText = new Components('text',(this.width / 2),(this.height / 2),theCanvas.fontButton,'rgb(120, 205, 245)','Continue','Calibri');
-            continueButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 - 20),60,30,'rgba(0,0,0,0)');
-            restartButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(10, 78, 204,0.5)');
-            restartText = new Components('text',(this.width / 2),(this.height / 2 + 40),theCanvas.fontButton,'rgb(120, 205, 245)','Restart','Calibri');
-            restartButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 20),60,30,'rgba(0,0,0,0)');
-            quitButtonBack = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 60),60,30,'rgba(10, 78, 204,0.5)');
-            quitText = new Components('text',(this.width / 2),(this.height / 2 + 80),theCanvas.fontButton,'rgb(120, 205, 245)','Quit','Calibri');
-            quitButtonFront = new Components('button',(this.width / 2 - (60 / 2)),(this.height / 2 + 60),60,30,'rgba(0,0,0,0)');
-            background.builder();
-            mainTitle.builder();
-            continueButtonBack.builder();
-            continueText.builder();
-            continueButtonFront.builder();
-            restartButtonBack.builder();
-            restartText.builder();
-            restartButtonFront.builder();
-            quitButtonBack.builder();
-            quitText.builder();
-            quitButtonFront.builder();
+            this.background[3].builder();
+            this.mainTitle[3].builder();
+            this.buttonBack[4].builder();
+            this.buttonText[4].builder();
+            this.buttonFront[4].builder();
+            this.buttonBack[5].builder();
+            this.buttonText[5].builder();
+            this.buttonFront[5].builder();
+            this.buttonBack[6].builder();
+            this.buttonText[6].builder();
+            this.buttonFront[6].builder();
             if(theCanvas.x && theCanvas.y){
-                if(continueButtonFront.screenButtons()){
+                if(this.buttonFront[4].screenButtons()){
                     menuType = 'continueGameEnviroment';
                     actualMenu = menuType;
                 }
-                if(restartButtonFront.screenButtons()){
+                if(this.buttonFront[5].screenButtons()){
                     menuType = 'newGameEnviroment';
                     actualMenu = menuType;
                 }
-                if(quitButtonFront.screenButtons()){
+                if(this.buttonFront[6].screenButtons()){
                     this.removeFullScreen();
                 }
             }
@@ -291,13 +314,10 @@ const theCanvas = {
     },
     gameEnviroment: function(){
         if(menuType == 'newGameEnviroment' || menuType == 'continueGameEnviroment'){
-            var background, mainMenuButton;
-            background = new Components('backgroundImage',0,0,this.width,this.height,'Media/Mini-Game/Images/gameEnviroment.jpg');
-            mainMenuButton = new Components('imageButton',2,2,30,30,'Media/Mini-Game/Images/mainMenu.png');
-            background.builder();
-            mainMenuButton.builder();
+            this.background[4].builder();
+            this.imageButton[0].builder();
             if(theCanvas.x && theCanvas.y){
-               if(mainMenuButton.screenButtons()){
+               if(this.imageButton[0].screenButtons()){
                    menuType = 'continueMenu';
                    actualMenu = menuType;
                 }
@@ -311,22 +331,14 @@ const theCanvas = {
             }   
             if(menuType == 'continueGameEnviroment'){
                 if(controlType == 'touchscreen'){
-                    this.buttonUp = new Components('button',50,(this.height - 90),30,30,'blue','moveUp');
-                    this.buttonUp.builder();
-                    this.buttonBottom = new Components('button',50,(this.height - 25 - 5),30,30,'blue','moveUp');
-                    this.buttonBottom.builder();
-                    this.buttonLeft = new Components('button',20,(this.height - 60),30,30,'blue','moveUp');
-                    this.buttonLeft.builder();
-                    this.buttonRight = new Components('button',80,(this.height - 60),30,30,'blue','moveUp');
-                    this.buttonRight.builder();
-                    this.buttonRightUp = new Components('button',85,(this.height - 85),20,20,'green','moveUp');
-                    this.buttonRightUp.builder();
-                    this.buttonLeftUp = new Components('button',25,(this.height - 85),20,20,'green','moveUp');
-                    this.buttonLeftUp.builder();
-                    this.buttonRightBottom = new Components('button',85,(this.height - 25),20,20,'green','moveUp');
-                    this.buttonRightBottom.builder();
-                    this.buttonLeftBottom = new Components('button',25,(this.height - 25),20,20,'green','moveUp');
-                    this.buttonLeftBottom.builder(); 
+                    this.button[0].builder();//Top
+                    this.button[1].builder();//Bottom
+                    this.button[2].builder();//Left
+                    this.button[3].builder();//Right
+                    this.button[4].builder();//RightUp
+                    this.button[5].builder();//LeftUp
+                    this.button[6].builder();//RightBottom
+                    this.button[7].builder();//LeftBottom
                 }
                 this.controls();
                 character.builder();
@@ -337,110 +349,70 @@ const theCanvas = {
     controls: function(){
         if(controlType == 'touchscreen'){
             if(theCanvas.x && theCanvas.y){
-                if(this.buttonUp.screenButtons()){
-                    character.moveY1 = -1;
-                    character.moveY2 = -1;
-                    character.moveY3 = -1;
+                if(this.button[0].screenButtons()){
+                    character.moveY1 = -1; character.moveY2 = -1; character.moveY3 = -1;
                     character.moveCharacter();
                 }
-                if(this.buttonBottom.screenButtons()){
-                    character.moveY1 = 1;
-                    character.moveY2 = 1;
-                    character.moveY3 = 1;
+                if(this.button[1].screenButtons()){
+                    character.moveY1 = 1; character.moveY2 = 1; character.moveY3 = 1;
                     character.moveCharacter();
                 }
-                if(this.buttonLeft.screenButtons()){
-                    character.moveX1 = -1;
-                    character.moveX2 = -1;
-                    character.moveX3 = -1;
+                if(this.button[2].screenButtons()){
+                    character.moveX1 = -1; character.moveX2 = -1; character.moveX3 = -1;
                     character.moveCharacter();
                 }
-                if(this.buttonRight.screenButtons()){
-                    character.moveX1 = 1;
-                    character.moveX2 = 1;
-                    character.moveX3 = 1;
+                if(this.button[3].screenButtons()){
+                    character.moveX1 = 1; character.moveX2 = 1; character.moveX3 = 1;
                     character.moveCharacter();
                 }
-                if(this.buttonRightUp.screenButtons()){
-                    character.moveY1 = -1;
-                    character.moveY2 = -1;
-                    character.moveY3 = -1;
-                    character.moveX1 = 1;
-                    character.moveX2 = 1;
-                    character.moveX3 = 1;
+                if(this.button[4].screenButtons()){
+                    character.moveY1 = -1; character.moveY2 = -1; character.moveY3 = -1;
+                    character.moveX1 = 1; character.moveX2 = 1; character.moveX3 = 1;
                     character.moveCharacter();
                 }
-                if(this.buttonLeftUp.screenButtons()){
-                    character.moveY1 = -1;
-                    character.moveY2 = -1;
-                    character.moveY3 = -1;
-                    character.moveX1 = -1;
-                    character.moveX2 = -1;
-                    character.moveX3 = -1;
+                if(this.button[5].screenButtons()){
+                    character.moveY1 = -1; character.moveY2 = -1; character.moveY3 = -1;
+                    character.moveX1 = -1; character.moveX2 = -1; character.moveX3 = -1;
                     character.moveCharacter();
                 }
-                if(this.buttonRightBottom.screenButtons()){
-                    character.moveY1 = 1;
-                    character.moveY2 = 1;
-                    character.moveY3 = 1;
-                    character.moveX1 = 1;
-                    character.moveX2 = 1;
-                    character.moveX3 = 1;
+                if(this.button[6].screenButtons()){
+                    character.moveY1 = 1; character.moveY2 = 1; character.moveY3 = 1;
+                    character.moveX1 = 1; character.moveX2 = 1; character.moveX3 = 1;
                     character.moveCharacter();
                 }
-                if(this.buttonLeftBottom.screenButtons()){
-                    character.moveY1 = 1;
-                    character.moveY2 = 1;
-                    character.moveY3 = 1;
-                    character.moveX1 = -1;
-                    character.moveX2 = -1;
-                    character.moveX3 = -1;
+                if(this.button[7].screenButtons()){
+                    character.moveY1 = 1; character.moveY2 = 1; character.moveY3 = 1;
+                    character.moveX1 = -1; character.moveX2 = -1; character.moveX3 = -1;
                     character.moveCharacter();
                 }
             }else{
-                character.moveY1 = 0;
-                character.moveY2 = 0;
-                character.moveY3 = 0;
-                character.moveX1 = 0;
-                character.moveX2 = 0;
-                character.moveX3 = 0;
+                character.moveY1 = 0; character.moveY2 = 0; character.moveY3 = 0;
+                character.moveX1 = 0; character.moveX2 = 0; character.moveX3 = 0;
             }
-        }else{
+        }else if(controlType == undefined){
             window.addEventListener('keydown', ek=>{
                 theCanvas.key = (theCanvas.key || []);
                 theCanvas.key[ek.keyCode] = (ek.type == 'keydown');
             })
             window.addEventListener('keyup', ek=>{
                 theCanvas.key[ek.keyCode] = (ek.type == 'keydown');
-                character.moveY1 = 0;
-                character.moveY2 = 0;
-                character.moveY3 = 0;
-                character.moveX1 = 0;
-                character.moveX2 = 0;
-                character.moveX3 = 0;
+                character.moveY1 = 0; character.moveY2 = 0; character.moveY3 = 0;
+                character.moveX1 = 0; character.moveX2 = 0; character.moveX3 = 0;
             })
             if(theCanvas.key && theCanvas.key[37] || theCanvas.key && theCanvas.key[65]){
-                character.moveX1 = -1;
-                character.moveX2 = -1;
-                character.moveX3 = -1;
+                character.moveX1 = -1; character.moveX2 = -1; character.moveX3 = -1;
                 character.moveCharacter();
             }
             if(theCanvas.key && theCanvas.key[39] || theCanvas.key && theCanvas.key[68]){
-                character.moveX1 = 1;
-                character.moveX2 = 1;
-                character.moveX3 = 1;
+                character.moveX1 = 1; character.moveX2 = 1; character.moveX3 = 1;
                 character.moveCharacter();
             }
             if(theCanvas.key && theCanvas.key[38] || theCanvas.key && theCanvas.key[87]){
-                character.moveY1 = -1;
-                character.moveY2 = -1;
-                character.moveY3 = -1;
+                character.moveY1 = -1; character.moveY2 = -1; character.moveY3 = -1;
                 character.moveCharacter();
             }
             if(theCanvas.key && theCanvas.key[40] || theCanvas.key && theCanvas.key[83]){
-                character.moveY1 = 1;
-                character.moveY2 = 1;
-                character.moveY3 = 1;
+                character.moveY1 = 1; character.moveY2 = 1; character.moveY3 = 1;
                 character.moveCharacter();
             }
         }
